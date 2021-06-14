@@ -1,0 +1,45 @@
+plugins:
+  breakpoint:
+    executor: central_deployment_agent
+    package_name: cloudify-breakpoint-plugin
+    package_version: '1.0.0'
+
+dsl_definitions:
+  client_config: &client_config
+    client_config:
+      type: cloudify.datatypes.breakpoint.ClientConfig
+      description: Breakpoint key-value store client configuration.
+      required: true
+
+data_types:
+
+  cloudify.datatypes.breakpoint.ClientConfig:
+    properties:
+      host:
+        type: string
+        default: localhost
+      port:
+        type: integer
+        default: 2379
+      user:
+        type: string
+        required: false
+      password:
+        type: string
+        required: false
+      ca_cert:
+        type: string
+        required: false
+      cert_key:
+        type: string
+        required: false
+      cert_cert:
+        type: string
+        required: false
+      timeout:
+        type: integer
+        required: false
+      grpc_options:
+        required: false
+
+node_types:
