@@ -5,41 +5,71 @@ plugins:
     package_version: '1.0.0'
 
 dsl_definitions:
-  client_config: &client_config
+  authorization: &authorization
     client_config:
-      type: cloudify.datatypes.breakpoint.ClientConfig
-      description: Breakpoint key-value store client configuration.
+      type: cloudify.datatypes.breakpoint.Authorization
+      description: Authorization configurationto control the breakpoint.
       required: true
 
 data_types:
 
-  cloudify.datatypes.breakpoint.ClientConfig:
+  cloudify.types.breakpoint.Authorization:
     properties:
-      host:
-        type: string
-        default: localhost
-      port:
-        type: integer
-        default: 2379
-      user:
-        type: string
-        required: false
-      password:
-        type: string
-        required: false
-      ca_cert:
-        type: string
-        required: false
-      cert_key:
-        type: string
-        required: false
-      cert_cert:
-        type: string
-        required: false
-      timeout:
-        type: integer
-        required: false
-      grpc_options:
-        required: false
+      users:
+        type: list
+
+  cloudify.types.breakpoint.resourceconfig.Breakpoint:
+    properties:
+      default_break_on_start:
+        type: boolean
+        default: true
+      default_break_on_stop:
+        type: boolean
+        default: true
 
 node_types:
+
+  cloudify.nodes.breakpoint.Breakpoint:
+    derived_from: cloudify.nodes.etcd.Base
+    properties:
+      <<: *authorization
+      resource_config:
+        type: cloudify.datatypes.breakpoint.resourceconfig.Breakpoint
+        required: true
+# TODO (marrowne) mapping
+#    interfaces:
+#      cloudify.interfaces:
+#        lifecycle:
+#          start:
+#          stop:
+#        breakpoint:
+#          check:
+
+workflows:
+
+  set_breakpoint_state:
+# TODO (marrowne) mapping
+#    mapping:
+    parameters:
+      node_id:
+        description: The list of node IDs to open breakpoint for.
+        type: list
+      node_instance_id:
+        description: The list of node instance IDs to open breakpoint for.
+        type: list
+      all_breakpoints:
+        description: Override the node (instance) id lists and open all breakpoints.
+        type: boolean
+        default: false
+      break_on_start:
+        description: Specifies if the breakpoint should stop on start lifecycle operation.
+        type: boolean
+        default: true
+      break_on_stop:
+        description: Specifies if the breakpoint should stop on stop lifecycle operation.
+        type: boolean
+        default: true
+      permanent:
+        description: Specifies that this setting of the breakpoints is permanent. If false if will apply only to the next execution.
+        type: boolean
+        default: false
