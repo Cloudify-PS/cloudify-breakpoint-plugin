@@ -47,7 +47,6 @@ node_types:
 workflows:
 
   set_breakpoint_state:
-# TODO (marrowne) mapping
     mapping: breakpoint.breakpoint_plugin.workflows.state.set_breakpoint_state
     parameters:
       node_ids:

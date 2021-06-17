@@ -5,6 +5,7 @@ from unittest.mock import patch, MagicMock
 from base import BreakpointTestBase
 from breakpoint_plugin.resources.breakpoint import start, stop
 from cloudify.exceptions import NonRecoverableError
+from cloudify.state import current_ctx
 
 
 class BreakpointNodeTest(BreakpointTestBase):
@@ -30,8 +31,64 @@ class BreakpointNodeTest(BreakpointTestBase):
                     'node_ids': None,
                     'node_instance_ids': ['BreakpointTestCase'],
                     'permanent': True,
-                    'break_on_start': True,
-                    'break_on_stop': True
+                    'break_on_start': False
+                },
+                'workflow_id': 'set_breakpoint_state',
+                'status_display': 'completed',
+                'created_by': 'admin'
+            },
+            {
+                'id': 'ab7452fc-bdac-41f1-952b-5e1789346acf',
+                'ended_at': '2021-06-16T14:45:55.592Z',
+                'parameters': {
+                    'node_ids': None,
+                    'node_instance_ids': ['BreakpointTestCase'],
+                    'permanent': True,
+                    'break_on_start': True
+                },
+                'workflow_id': 'set_breakpoint_state',
+                'status_display': 'completed',
+                'created_by': 'admin'
+            },
+            {
+                'id': 'a9b18e4d-f181-4fe0-89d5-a450330c2fff',
+                'created_at': '2021-06-17T10:23:26.975Z',
+                'ended_at': '2021-06-17T10:33:36.171Z',
+                'workflow_id': 'another_workflow',
+                'started_at': '2021-06-17T10:23:26.976Z',
+                'blueprint_id': 'simple-breakpoint-blueprint',
+                'deployment_id': 'BreakpointTestCase',
+                'status_display': 'completed',
+                'created_by': 'admin'
+            }
+        ])
+        self._prepare_context_for_operation(
+            test_name='BreakpointTestCase',
+            test_properties={
+                'resource_config': {
+                    'default_break_on_start': True
+                },
+                'authorization': {
+                    'users': ['Alice']
+                }
+            },
+            ctx_operation_name='cloudify.interfaces.lifecycle.start')
+
+        with self.assertRaises(NonRecoverableError) as err:
+            start(current_ctx.ctx)
+            self.assertEqual(str(err), self.expected_msg)
+
+    @patch('breakpoint_plugin.resources.breakpoint.get_rest_client')
+    def test_start_nonpermanent(self, get_rest_client):
+        get_rest_client.return_value = self.get_mock_rest_client(executions=[
+            {
+                'id': 'ab7452fc-bdac-41f1-952b-5e1789346acf',
+                'ended_at': '2021-06-16T14:45:55.592Z',
+                'parameters': {
+                    'node_ids': None,
+                    'node_instance_ids': ['BreakpointTestCase'],
+                    'permanent': False,
+                    'break_on_start': True
                 },
                 'workflow_id': 'set_breakpoint_state',
                 'status_display': 'completed',
@@ -45,38 +102,117 @@ class BreakpointNodeTest(BreakpointTestBase):
                     'default_break_on_start': True
                 },
                 'authorization': {
-                    'users': [
-                        'Alice',
-                        'Bob'
-                    ]
+                    'users': ['Alice']
                 }
             },
             ctx_operation_name='cloudify.interfaces.lifecycle.start')
 
         with self.assertRaises(NonRecoverableError) as err:
-            start(self._ctx)
+            start(current_ctx.ctx)
             self.assertEqual(str(err), self.expected_msg)
 
-    def test_start_nonpermanent(self):
-        with self.assertRaises(NonRecoverableError) as err:
-            start(self._ctx)
-            self.assertEqual(str(err), self.expected_msg)
+    @patch('breakpoint_plugin.resources.breakpoint.get_rest_client')
+    def test_restart_nonpermanent_open_breakpoint(self, get_rest_client):
+        get_rest_client.return_value = self.get_mock_rest_client(executions=[
+            {
+                'id': 'ab7452fc-bdac-41f1-952b-5e1789346acf',
+                'ended_at': '2021-06-16T14:45:55.592Z',
+                'parameters': {
+                    'node_ids': None,
+                    'node_instance_ids': ['BreakpointTestCase'],
+                    'permanent': False,
+                    'break_on_start': False
+                },
+                'workflow_id': 'set_breakpoint_state',
+                'status_display': 'completed',
+                'created_by': 'admin'
+            },
+            {
+                'id': 'a9b18e4d-f181-4fe0-89d5-a450330c2fff',
+                'created_at': '2021-06-17T10:23:26.975Z',
+                'ended_at': '2021-06-17T10:33:36.171Z',
+                'workflow_id': 'workflow',
+                'started_at': '2021-06-17T10:23:26.976Z',
+                'blueprint_id': 'simple-breakpoint-blueprint',
+                'deployment_id': 'BreakpointTestCase',
+                'status_display': 'completed',
+                'created_by': 'admin'
+             }
+        ])
+        self._prepare_context_for_operation(
+            test_name='BreakpointTestCase',
+            test_properties={
+                'resource_config': {
+                    'default_break_on_start': True
+                },
+                'authorization': {
+                    'users': ['Alice']
+                }
+            },
+            ctx_operation_name='cloudify.interfaces.lifecycle.start')
 
-    def test_restart_nonpermanent_open_breakpoint(self):
-        self.assertTrue(False, msg='Not Implemented Yet')
+        start(current_ctx.ctx)
 
-    def test_nonpermanent_open_breakpoint(self):
-        self.assertTrue(False, msg='Not Implemented Yet')
+        # assert
+        # no error raised
+
+    @patch('breakpoint_plugin.resources.breakpoint.get_rest_client')
+    def test_nonpermanent_open_breakpoint(self, get_rest_client):
+        get_rest_client.return_value = self.get_mock_rest_client(executions=[
+            {
+                'id': 'ab7452fc-bdac-41f1-952b-5e1789346acf',
+                'ended_at': '2021-06-16T14:45:55.592Z',
+                'parameters': {
+                    'node_ids': None,
+                    'node_instance_ids': ['BreakpointTestCase'],
+                    'permanent': False,
+                    'break_on_start': False
+                },
+                'workflow_id': 'set_breakpoint_state',
+                'status_display': 'completed',
+                'created_by': 'admin'
+            }
+        ])
+        self._prepare_context_for_operation(
+            test_name='BreakpointTestCase',
+            test_properties={
+                'resource_config': {
+                    'default_break_on_start': True
+                },
+                'authorization': {
+                    'users': ['Alice']
+                }
+            },
+            ctx_operation_name='cloudify.interfaces.lifecycle.start')
+
+        start(current_ctx.ctx)
+
+        # assert
+        # no error raised
 
     def test_stop_nonpermanent(self):
         with self.assertRaises(NonRecoverableError) as err:
             stop(self._ctx)
             self.assertEqual(str(err), self.expected_msg)
 
-    def test_default_break_on_start(self):
+    @patch('breakpoint_plugin.resources.breakpoint.get_rest_client')
+    def test_default_break_on_start(self, get_rest_client):
+        get_rest_client.return_value = self.get_mock_rest_client(executions=[])
+        self._prepare_context_for_operation(
+            test_name='BreakpointTestCase',
+            test_properties={
+                'resource_config': {
+                    'default_break_on_start': True
+                },
+                'authorization': {
+                    'users': ['Alice']
+                }
+            },
+            ctx_operation_name='cloudify.interfaces.lifecycle.start')
+
         with self.assertRaises(NonRecoverableError) as err:
+            start(current_ctx.ctx)
             self.assertEqual(str(err), self.expected_msg)
-        self.assertTrue(False, msg='Not Implemented Yet')
 
     def test_default_break_on_stop(self):
         with self.assertRaises(NonRecoverableError) as err:
