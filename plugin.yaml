@@ -6,8 +6,8 @@ plugins:
 
 dsl_definitions:
   authorization: &authorization
-    client_config:
-      type: cloudify.datatypes.breakpoint.Authorization
+    authorization:
+      type: cloudify.types.breakpoint.Authorization
       description: Authorization configurationto control the breakpoint.
       required: true
 
@@ -30,18 +30,17 @@ data_types:
 node_types:
 
   cloudify.nodes.breakpoint.Breakpoint:
-    derived_from: cloudify.nodes.etcd.Base
+    derived_from: cloudify.nodes.Root
     properties:
       <<: *authorization
       resource_config:
-        type: cloudify.datatypes.breakpoint.resourceconfig.Breakpoint
+        type: cloudify.types.breakpoint.resourceconfig.Breakpoint
         required: true
 # TODO (marrowne) mapping
-#    interfaces:
-#      cloudify.interfaces:
-#        lifecycle:
-#          start:
-#          stop:
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        start: breakpoint.breakpoint_plugin.resources.breakpoint.start
+        stop: breakpoint.breakpoint_plugin.resources.breakpoint.stop
 #        breakpoint:
 #          check:
 
@@ -49,12 +48,12 @@ workflows:
 
   set_breakpoint_state:
 # TODO (marrowne) mapping
-#    mapping:
+    mapping: breakpoint.breakpoint_plugin.workflows.state.set_breakpoint_state
     parameters:
-      node_id:
+      node_ids:
         description: The list of node IDs to open breakpoint for.
         type: list
-      node_instance_id:
+      node_instance_ids:
         description: The list of node instance IDs to open breakpoint for.
         type: list
       all_breakpoints:
