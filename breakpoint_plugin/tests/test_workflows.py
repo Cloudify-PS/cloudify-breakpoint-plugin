@@ -9,15 +9,18 @@ from cloudify.exceptions import NonRecoverableError
 
 
 class BreakpointWorkflowTest(BreakpointTestBase):
-    def get_mock_rest_client(self):
+    def get_mock_rest_client(self, execution_creator_role=None):
         mock_rest_client = MagicMock()
         node_instance = namedtuple('MockNodeInstance', 'node_id')
         mock_rest_client.node_instances.get = MagicMock(return_value=node_instance('BreakpointTestCase'))
+        mock_rest_client.users.get = MagicMock(
+            return_value={'role': execution_creator_role})
         return mock_rest_client
 
     @patch('breakpoint_plugin.workflows.state.get_rest_client')
     def test_admin_allowed(self, get_rest_client):
-        get_rest_client.return_value = self.get_mock_rest_client()
+        get_rest_client.return_value = self.get_mock_rest_client(
+            execution_creator_role='sys_admin')
         self._prepare_context_for_operation(
             test_name='BreakpointTestCase',
             test_properties={
@@ -59,7 +62,10 @@ class BreakpointWorkflowTest(BreakpointTestBase):
                                       ctx=self._ctx)
         self.assertTrue(result)
 
-    def test_unauthorized_user(self):
+    @patch('breakpoint_plugin.workflows.state.get_rest_client')
+    def test_unauthorized_user(self, get_rest_client):
+        get_rest_client.return_value = self.get_mock_rest_client(
+            execution_creator_role='default')
         self._prepare_context_for_operation(
             test_name='BreakpointTestCase',
             test_properties={

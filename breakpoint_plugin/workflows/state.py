@@ -4,6 +4,14 @@ from cloudify.exceptions import NonRecoverableError
 from cloudify.manager import get_rest_client
 
 
+def has_admin_role(execution_creator_username):
+    client = get_rest_client()
+    role = client.users.get(execution_creator_username).get('role')
+    if role == 'sys_admin':
+        return True
+    return False
+
+
 def get_node_instance(node_instance_id):
     rest_client = get_rest_client()
     return rest_client.node_instances.get(node_instance_id=node_instance_id)
@@ -33,7 +41,7 @@ def set_breakpoint_state(node_ids=None,
 
 
 def execution_creator_auth(users, execution_creator_username):
-    if execution_creator_username != 'admin' and \
-            execution_creator_username not in users:
+    if execution_creator_username not in users and \
+            not has_admin_role(execution_creator_username):
         raise NonRecoverableError(
             "User '{}' is not allowed to executed this workflow.".format(execution_creator_username))

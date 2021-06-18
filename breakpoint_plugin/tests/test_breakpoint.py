@@ -16,9 +16,11 @@ class BreakpointNodeTest(BreakpointTestBase):
     def setUp(self):
         super(BreakpointNodeTest, self).setUp()
 
-    def get_mock_rest_client(self, executions):
+    def get_mock_rest_client(self, executions=None, execution_creator_role=None):
         mock_rest_client = MagicMock()
-        mock_rest_client.executions.list = MagicMock(return_value=executions)
+        mock_rest_client.executions.list = MagicMock(return_value=executions or [])
+        mock_rest_client.users.get = MagicMock(
+            return_value={'role': execution_creator_role})
         return mock_rest_client
 
     @patch('breakpoint_plugin.resources.breakpoint.get_rest_client')
@@ -355,7 +357,10 @@ class BreakpointNodeTest(BreakpointTestBase):
             start(current_ctx.ctx)
             self.assertEqual(str(err), self.expected_msg)
 
-    def test_check_executed_by_admin(self):
+    @patch('breakpoint_plugin.resources.breakpoint.get_rest_client')
+    def test_check_executed_by_admin(self, get_rest_client):
+        get_rest_client.return_value = self.get_mock_rest_client(
+            execution_creator_role="sys_admin")
         self._prepare_context_for_operation(
             test_name='BreakpointTestCase',
             test_properties={
@@ -396,7 +401,10 @@ class BreakpointNodeTest(BreakpointTestBase):
         # assert
         # no error raised
 
-    def test_check_executed_by_unauthorized(self):
+    @patch('breakpoint_plugin.resources.breakpoint.get_rest_client')
+    def test_check_executed_by_unauthorized(self, get_rest_client):
+        get_rest_client.return_value = self.get_mock_rest_client(
+            execution_creator_role='default')
         self._prepare_context_for_operation(
             test_name='BreakpointTestCase',
             test_properties={

@@ -27,6 +27,14 @@ def is_valid_execution(latest_execution):
            and latest_execution.get('status_display') == 'completed'
 
 
+def has_admin_role(execution_creator_username):
+    client = get_rest_client()
+    role = client.users.get(execution_creator_username).get('role')
+    if role == 'sys_admin':
+        return True
+    return False
+
+
 def get_latest_execution(ctx, node_id, instance_id, executions):
     drop_restarts = dropwhile(
             lambda x: x.get('deployment_id') == ctx.deployment.id
@@ -75,7 +83,6 @@ def get_valid_execution(ctx, node_id, instance_id):
     if latest_execution:
         return latest_execution
     return get_permanent_execution(ctx, node_id, instance_id, executions)
-
 
 @operation
 def start(ctx, **kwargs):
@@ -127,13 +134,13 @@ def stop(ctx, **kwargs):
 @operation
 def check(ctx, **kwargs):
     execution_creator_username = ctx.execution_creator_username
-    if execution_creator_username == 'admin':
-        ctx.logger.info('admin is authorized')
-        return
     if execution_creator_username in \
             ctx.node.properties.get('authorization').get('users'):
         ctx.logger.info('{} is authorized.'
                         .format(execution_creator_username))
+        return
+    if has_admin_role(execution_creator_username):
+        ctx.logger.info('admin is authorized')
         return
     raise NonRecoverableError('{} is not authorized.'
                               .format(execution_creator_username))
