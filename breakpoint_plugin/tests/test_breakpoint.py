@@ -26,7 +26,7 @@ class BreakpointNodeTest(BreakpointTestBase):
         get_rest_client.return_value = self.get_mock_rest_client(executions=[
             {
                 'id': 'ab7452fc-bdac-41f1-952b-5e1789346acf',
-                'ended_at': '2021-06-16T14:45:55.592Z',
+                'created_at': '2021-06-16T14:45:55.592Z',
                 'parameters': {
                     'node_ids': None,
                     'node_instance_ids': ['BreakpointTestCase'],
@@ -39,7 +39,7 @@ class BreakpointNodeTest(BreakpointTestBase):
             },
             {
                 'id': 'ab7452fc-bdac-41f1-952b-5e1789346acf',
-                'ended_at': '2021-06-16T14:45:55.592Z',
+                'created_at': '2021-06-16T14:48:05.643Z',
                 'parameters': {
                     'node_ids': None,
                     'node_instance_ids': ['BreakpointTestCase'],
@@ -53,10 +53,7 @@ class BreakpointNodeTest(BreakpointTestBase):
             {
                 'id': 'a9b18e4d-f181-4fe0-89d5-a450330c2fff',
                 'created_at': '2021-06-17T10:23:26.975Z',
-                'ended_at': '2021-06-17T10:33:36.171Z',
                 'workflow_id': 'another_workflow',
-                'started_at': '2021-06-17T10:23:26.976Z',
-                'blueprint_id': 'simple-breakpoint-blueprint',
                 'deployment_id': 'BreakpointTestCase',
                 'status_display': 'completed',
                 'created_by': 'admin'
@@ -83,7 +80,7 @@ class BreakpointNodeTest(BreakpointTestBase):
         get_rest_client.return_value = self.get_mock_rest_client(executions=[
             {
                 'id': 'ab7452fc-bdac-41f1-952b-5e1789346acf',
-                'ended_at': '2021-06-16T14:45:55.592Z',
+                'created_at': '2021-06-16T14:45:55.592Z',
                 'parameters': {
                     'node_ids': None,
                     'node_instance_ids': ['BreakpointTestCase'],
@@ -116,7 +113,7 @@ class BreakpointNodeTest(BreakpointTestBase):
         get_rest_client.return_value = self.get_mock_rest_client(executions=[
             {
                 'id': 'ab7452fc-bdac-41f1-952b-5e1789346acf',
-                'ended_at': '2021-06-16T14:45:55.592Z',
+                'created_at': '2021-06-16T14:45:55.592Z',
                 'parameters': {
                     'node_ids': None,
                     'node_instance_ids': ['BreakpointTestCase'],
@@ -130,10 +127,7 @@ class BreakpointNodeTest(BreakpointTestBase):
             {
                 'id': 'a9b18e4d-f181-4fe0-89d5-a450330c2fff',
                 'created_at': '2021-06-17T10:23:26.975Z',
-                'ended_at': '2021-06-17T10:33:36.171Z',
                 'workflow_id': 'workflow',
-                'started_at': '2021-06-17T10:23:26.976Z',
-                'blueprint_id': 'simple-breakpoint-blueprint',
                 'deployment_id': 'BreakpointTestCase',
                 'status_display': 'completed',
                 'created_by': 'admin'
@@ -161,7 +155,7 @@ class BreakpointNodeTest(BreakpointTestBase):
         get_rest_client.return_value = self.get_mock_rest_client(executions=[
             {
                 'id': 'ab7452fc-bdac-41f1-952b-5e1789346acf',
-                'ended_at': '2021-06-16T14:45:55.592Z',
+                'created_at': '2021-06-16T14:45:55.592Z',
                 'parameters': {
                     'node_ids': None,
                     'node_instance_ids': ['BreakpointTestCase'],
@@ -215,7 +209,7 @@ class BreakpointNodeTest(BreakpointTestBase):
         get_rest_client.return_value = self.get_mock_rest_client(executions=[
             {
                 'id': 'ab7452fc-bdac-41f1-952b-5e1789346acf',
-                'ended_at': '2021-06-16T14:45:55.592Z',
+                'created_at': '2021-06-16T14:45:55.592Z',
                 'parameters': {
                     'node_ids': ['BreakpointTestCase'],
                     'node_instance_ids': None,
@@ -286,7 +280,7 @@ class BreakpointNodeTest(BreakpointTestBase):
         get_rest_client.return_value = self.get_mock_rest_client(executions=[
             {
                 'id': 'ab7452fc-bdac-41f1-952b-5e1789346acf',
-                'ended_at': '2021-06-16T14:45:55.592Z',
+                'created_at': '2021-06-16T14:45:55.592Z',
                 'parameters': {
                     'node_ids': None,
                     'node_instance_ids': None,
@@ -320,7 +314,7 @@ class BreakpointNodeTest(BreakpointTestBase):
         get_rest_client.return_value = self.get_mock_rest_client(executions=[
             {
                 'id': 'ab7452fc-bdac-41f1-952b-5e1789346acf',
-                'ended_at': '2021-06-16T14:45:55.592Z',
+                'created_at': '2021-06-16T14:45:55.592Z',
                 'parameters': {
                     'node_ids': None,
                     'node_instance_ids': ['BreakpointTestCase'],
@@ -333,7 +327,7 @@ class BreakpointNodeTest(BreakpointTestBase):
             },
             {
                 'id': 'ab7452fc-bdac-41f1-952b-5e1789346ad0',
-                'ended_at': '2021-06-17T10:23:26.975Z',
+                'created_at': '2021-06-17T10:23:26.975Z',
                 'parameters': {
                     'node_ids': None,
                     'node_instance_ids': ['BreakpointTestCase'],

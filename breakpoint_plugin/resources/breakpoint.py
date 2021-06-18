@@ -2,6 +2,7 @@
 from cloudify.decorators import operation
 from cloudify.manager import get_rest_client
 from cloudify.exceptions import NonRecoverableError, OperationRetry
+from datetime import datetime
 from itertools import dropwhile
 
 # Local imports
@@ -11,6 +12,7 @@ BREAKPOINT_WORKFLOW_NAME = 'set_breakpoint_state'
 BREAK_MSG = 'Breakpoint active. An allowed user must deactivate ' \
                'this breakpoint using the Set Breakpoint State ' \
                'workflow to continue.'
+EXECUTION_TIMESTAMP_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 
 
 def is_node_related(node_id, instance_id, execution):
@@ -29,7 +31,7 @@ def get_latest_execution(ctx, node_id, instance_id, executions):
     drop_restarts = dropwhile(
             lambda x: x.get('deployment_id') == ctx.deployment.id
             and x.get('workflow_id') == ctx.workflow_id,
-            executions[::-1])  # reversing executions
+            executions)  # reversing executions
     try:
         latest_execution = next(drop_restarts)
     except StopIteration:  # when iterator is empty
@@ -51,8 +53,8 @@ def get_permanent_execution(ctx, node_id, instance_id, executions):
         and x.get('parameters').get('permanent'),
         executions)
     try:
-        *_, valid_execution = permanent_executions
-    except ValueError:  # when iterator is empty
+        valid_execution = next(permanent_executions)
+    except StopIteration:  # when iterator is empty
         return None
     ctx.logger.info('Applying the permanent execution: ID {}, '
                     'by {}, at {}.'.format(
@@ -65,7 +67,10 @@ def get_permanent_execution(ctx, node_id, instance_id, executions):
 def get_valid_execution(ctx, node_id, instance_id):
     client = get_rest_client()
     executions = client.executions.list()
-    # TODO (marrowne) sorting desc by date?
+    executions.sort(
+        reverse=True,
+        key=lambda x: datetime.strptime(x.get('created_at'),
+                                        EXECUTION_TIMESTAMP_FORMAT))
     latest_execution = get_latest_execution(ctx, node_id, instance_id, executions)
     if latest_execution:
         return latest_execution
