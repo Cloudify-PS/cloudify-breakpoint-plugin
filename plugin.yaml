@@ -36,13 +36,12 @@ node_types:
       resource_config:
         type: cloudify.types.breakpoint.resourceconfig.Breakpoint
         required: true
-# TODO (marrowne) mapping
     interfaces:
       cloudify.interfaces.lifecycle:
         start: breakpoint.breakpoint_plugin.resources.breakpoint.start
         stop: breakpoint.breakpoint_plugin.resources.breakpoint.stop
-#        breakpoint:
-#          check:
+      cloudify.interfaces.breakpoint:
+        check: breakpoint.breakpoint_plugin.resources.breakpoint.check
 
 workflows:
 

@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 
 # Local imports
 from base import BreakpointTestBase
-from breakpoint_plugin.resources.breakpoint import start, stop
+from breakpoint_plugin.resources.breakpoint import start, stop, check
 from cloudify.exceptions import NonRecoverableError, OperationRetry
 from cloudify.state import current_ctx
 
@@ -360,3 +360,61 @@ class BreakpointNodeTest(BreakpointTestBase):
         with self.assertRaises(NonRecoverableError) as err:
             start(current_ctx.ctx)
             self.assertEqual(str(err), self.expected_msg)
+
+    def test_check_executed_by_admin(self):
+        self._prepare_context_for_operation(
+            test_name='BreakpointTestCase',
+            test_properties={
+                'resource_config': {
+                    'default_break_on_start': False
+                },
+                'authorization': {
+                    'users': ['Alice']
+                }
+            },
+            ctx_operation_name='cloudify.interfaces.breakpoint.check',
+            ctx_execution_creator_username='admin')
+
+        check(current_ctx.ctx)
+
+        # assert
+        # no error raised
+
+    def test_check_executed_by_authorized(self):
+        self._prepare_context_for_operation(
+            test_name='BreakpointTestCase',
+            test_properties={
+                'resource_config': {
+                    'default_break_on_start': False
+                },
+                'authorization': {
+                    'users': [
+                        'Alice',
+                        'Bob'
+                    ]
+                }
+            },
+            ctx_operation_name='cloudify.interfaces.breakpoint.check',
+            ctx_execution_creator_username='Bob')
+
+        check(current_ctx.ctx)
+
+        # assert
+        # no error raised
+
+    def test_check_executed_by_unauthorized(self):
+        self._prepare_context_for_operation(
+            test_name='BreakpointTestCase',
+            test_properties={
+                'resource_config': {
+                    'default_break_on_start': False
+                },
+                'authorization': {
+                    'users': ['Alice']
+                }
+            },
+            ctx_operation_name='cloudify.interfaces.breakpoint.check',
+            ctx_execution_creator_username='Eve')
+
+        with self.assertRaises(NonRecoverableError):
+            check(current_ctx.ctx)

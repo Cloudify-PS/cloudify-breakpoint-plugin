@@ -117,3 +117,18 @@ def stop(ctx, **kwargs):
 
     # No error raised so continue execution without any interruption
     ctx.logger.info('The breakpoint is inactive.')
+
+
+@operation
+def check(ctx, **kwargs):
+    execution_creator_username = ctx.execution_creator_username
+    if execution_creator_username == 'admin':
+        ctx.logger.info('admin is authorized')
+        return
+    if execution_creator_username in \
+            ctx.node.properties.get('authorization').get('users'):
+        ctx.logger.info('{} is authorized.'
+                        .format(execution_creator_username))
+        return
+    raise NonRecoverableError('{} is not authorized.'
+                              .format(execution_creator_username))
