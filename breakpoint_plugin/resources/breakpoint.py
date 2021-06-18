@@ -1,7 +1,7 @@
 # Third party imports
 from cloudify.decorators import operation
 from cloudify.manager import get_rest_client
-from cloudify.exceptions import NonRecoverableError
+from cloudify.exceptions import NonRecoverableError, OperationRetry
 from itertools import dropwhile
 
 # Local imports
@@ -87,7 +87,8 @@ def start(ctx, **kwargs):
                                             ctx.instance.id)
     if not active_breakpoint and default_break_on_start:
         raise break_error
-    if active_breakpoint.get('parameters').get('break_on_start'):
+    if active_breakpoint \
+            and active_breakpoint.get('parameters').get('break_on_start'):
         raise break_error
 
     # No error raised so continue execution without any interruption
@@ -96,9 +97,23 @@ def start(ctx, **kwargs):
 
 @operation
 def stop(ctx, **kwargs):
+    break_error = OperationRetry(BREAK_MSG)
+
     default_break_on_stop = \
         get_desired_value(
             'default_break_on_stop',
             kwargs,
             ctx.instance.runtime_properties,
             ctx.node.properties.get('resource_config'))
+
+    active_breakpoint = get_valid_execution(ctx,
+                                            ctx.node.id,
+                                            ctx.instance.id)
+    if not active_breakpoint and default_break_on_stop:
+        raise break_error
+    if active_breakpoint and \
+            active_breakpoint.get('parameters').get('break_on_stop'):
+        raise break_error
+
+    # No error raised so continue execution without any interruption
+    ctx.logger.info('The breakpoint is inactive.')
