@@ -1,4 +1,5 @@
 # cloudify-breakpoint-plugin
+#### Breakpoint, Semaphore, confirmed execution, manual intervention
 
 A Cloudify plugin for confirming an execution, which is defined as a stop in workflow execution that needs to be acknowledged by a user (may be any or specific user).
 
