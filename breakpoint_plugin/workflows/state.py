@@ -1,20 +1,20 @@
 # Third party imports
 from cloudify.decorators import workflow
 from cloudify.exceptions import NonRecoverableError
-from cloudify.manager import get_rest_client
+
+# Local imports
+from breakpoint_plugin.utils import (
+    get_node_instance,
+    has_admin_role
+)
 
 
-def has_admin_role(execution_creator_username):
-    client = get_rest_client()
-    role = client.users.get(execution_creator_username).get('role')
-    if role == 'sys_admin':
-        return True
-    return False
-
-
-def get_node_instance(node_instance_id):
-    rest_client = get_rest_client()
-    return rest_client.node_instances.get(node_instance_id=node_instance_id)
+def execution_creator_auth(users, execution_creator_username):
+    if execution_creator_username not in users and \
+            not has_admin_role(execution_creator_username):
+        raise NonRecoverableError(
+            "User '{}' is not allowed to executed this workflow."
+            .format(execution_creator_username))
 
 
 @workflow
@@ -38,10 +38,3 @@ def set_breakpoint_state(node_ids=None,
         users = node.properties.get('authorization').get('users')
         execution_creator_auth(users, execution_creator_username)
     return True
-
-
-def execution_creator_auth(users, execution_creator_username):
-    if execution_creator_username not in users and \
-            not has_admin_role(execution_creator_username):
-        raise NonRecoverableError(
-            "User '{}' is not allowed to executed this workflow.".format(execution_creator_username))

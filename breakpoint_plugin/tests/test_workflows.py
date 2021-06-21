@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 from collections import namedtuple
 
 # Local imports
-from base import BreakpointTestBase
+from breakpoint_plugin.tests.base import BreakpointTestBase
 from breakpoint_plugin.workflows.state import set_breakpoint_state
 from cloudify.exceptions import NonRecoverableError
 
@@ -12,12 +12,13 @@ class BreakpointWorkflowTest(BreakpointTestBase):
     def get_mock_rest_client(self, execution_creator_role=None):
         mock_rest_client = MagicMock()
         node_instance = namedtuple('MockNodeInstance', 'node_id')
-        mock_rest_client.node_instances.get = MagicMock(return_value=node_instance('BreakpointTestCase'))
+        mock_rest_client.node_instances.get = MagicMock(
+            return_value=node_instance('BreakpointTestCase'))
         mock_rest_client.users.get = MagicMock(
             return_value={'role': execution_creator_role})
         return mock_rest_client
 
-    @patch('breakpoint_plugin.workflows.state.get_rest_client')
+    @patch('breakpoint_plugin.utils.get_rest_client')
     def test_admin_allowed(self, get_rest_client):
         get_rest_client.return_value = self.get_mock_rest_client(
             execution_creator_role='sys_admin')
@@ -62,7 +63,7 @@ class BreakpointWorkflowTest(BreakpointTestBase):
                                       ctx=self._ctx)
         self.assertTrue(result)
 
-    @patch('breakpoint_plugin.workflows.state.get_rest_client')
+    @patch('breakpoint_plugin.utils.get_rest_client')
     def test_unauthorized_user(self, get_rest_client):
         get_rest_client.return_value = self.get_mock_rest_client(
             execution_creator_role='default')
