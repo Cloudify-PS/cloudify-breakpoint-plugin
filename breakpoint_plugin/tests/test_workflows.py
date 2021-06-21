@@ -38,8 +38,10 @@ class BreakpointWorkflowTest(BreakpointTestBase):
             ctx_operation_name='set_breakpoint_state',
             ctx_execution_creator_username='admin')
         self._ctx.get_node = MagicMock(return_value=self._ctx.node)
+
         result = set_breakpoint_state(node_instance_ids=['BreakpointTestCase'],
                                       ctx=self._ctx)
+
         self.assertTrue(result)
 
     def test_authorized_user(self):
@@ -59,8 +61,10 @@ class BreakpointWorkflowTest(BreakpointTestBase):
             ctx_operation_name='set_breakpoint_state',
             ctx_execution_creator_username='Alice')
         self._ctx.get_node = MagicMock(return_value=self._ctx.node)
+
         result = set_breakpoint_state(node_ids=['BreakpointTestCase'],
                                       ctx=self._ctx)
+
         self.assertTrue(result)
 
     @patch('breakpoint_plugin.utils.get_rest_client')
@@ -83,6 +87,7 @@ class BreakpointWorkflowTest(BreakpointTestBase):
             ctx_operation_name='set_breakpoint_state',
             ctx_execution_creator_username='Eve')
         self._ctx.get_node = MagicMock(return_value=self._ctx.node)
+
         with self.assertRaises(NonRecoverableError):
             set_breakpoint_state(node_ids=['BreakpointTestCase'],
                                  ctx=self._ctx)

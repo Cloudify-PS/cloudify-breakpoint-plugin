@@ -57,7 +57,9 @@ class BreakpointStateExecutionsTest(TestCase):
             workflow_name='set_breakpoint_state',
             deployment_id='BreakpointTestCase',
             logger=MagicMock())
+
         valid_execution = breakpoint_executions.get_valid_execution()
+
         self.assertEqual(valid_execution.get('created_at'),
                          '2021-06-17T10:23:26.975Z')
 
@@ -105,8 +107,10 @@ class BreakpointStateExecutionsTest(TestCase):
             workflow_name='set_breakpoint_state',
             deployment_id='BreakpointTestCase',
             logger=MagicMock())
+
         valid_execution = \
             breakpoint_executions.get_permanent_execution(executions)
+
         self.assertEqual(valid_execution.get('created_at'),
                          '2021-06-16T14:48:05.643Z')
 
@@ -146,8 +150,10 @@ class BreakpointStateExecutionsTest(TestCase):
             workflow_name='set_breakpoint_state',
             deployment_id='BreakpointTestCase',
             logger=MagicMock())
+
         valid_execution = \
             breakpoint_executions.get_latest_execution(executions)
+
         self.assertEqual(valid_execution.get('created_at'),
                          '2021-06-17T10:23:26.975Z')
 
@@ -172,7 +178,9 @@ class BreakpointStateExecutionsTest(TestCase):
             workflow_name='set_breakpoint_state',
             deployment_id='BreakpointTestCase',
             logger=MagicMock())
+
         result = breakpoint_executions.is_node_related(executions)
+
         self.assertTrue(result)
 
     def test_node_instance_related(self):
@@ -196,7 +204,9 @@ class BreakpointStateExecutionsTest(TestCase):
             workflow_name='set_breakpoint_state',
             deployment_id='BreakpointTestCase',
             logger=MagicMock())
+
         result = breakpoint_executions.is_node_related(executions)
+
         self.assertTrue(result)
 
     def test_all_breakpoints(self):
@@ -221,7 +231,9 @@ class BreakpointStateExecutionsTest(TestCase):
             workflow_name='set_breakpoint_state',
             deployment_id='BreakpointTestCase',
             logger=MagicMock())
+
         result = breakpoint_executions.is_node_related(executions)
+
         self.assertTrue(result)
 
     def test_unrelated(self):
@@ -245,7 +257,9 @@ class BreakpointStateExecutionsTest(TestCase):
             workflow_name='set_breakpoint_state',
             deployment_id='BreakpointTestCase',
             logger=MagicMock())
+
         result = breakpoint_executions.is_node_related(executions)
+
         self.assertFalse(result)
 
     def test_valid_execution(self):
@@ -269,7 +283,9 @@ class BreakpointStateExecutionsTest(TestCase):
             workflow_name='set_breakpoint_state',
             deployment_id='BreakpointTestCase',
             logger=MagicMock())
+
         result = breakpoint_executions.is_valid_execution(executions)
+
         self.assertTrue(result)
 
     def test_invalid_execution_status(self):
@@ -293,7 +309,9 @@ class BreakpointStateExecutionsTest(TestCase):
             workflow_name='set_breakpoint_state',
             deployment_id='BreakpointTestCase',
             logger=MagicMock())
+
         result = breakpoint_executions.is_valid_execution(executions)
+
         self.assertFalse(result)
 
     def test_invalid_execution_workflow_id(self):
@@ -317,5 +335,7 @@ class BreakpointStateExecutionsTest(TestCase):
             workflow_name='set_breakpoint_state',
             deployment_id='BreakpointTestCase',
             logger=MagicMock())
+
         result = breakpoint_executions.is_valid_execution(executions)
+
         self.assertFalse(result)

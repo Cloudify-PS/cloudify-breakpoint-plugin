@@ -19,14 +19,20 @@ BREAK_MSG = 'Breakpoint active. An allowed user must deactivate ' \
 
 @operation
 def start(ctx, **kwargs):
+    """
+    When break_on_start (or initially default_break_on_start) is enabled
+    it raises NonRecoverableError.
+    :param ctx: Cloudify context
+    :param kwargs: The parameters given from the user
+    """
     break_error = NonRecoverableError(BREAK_MSG)
 
     default_break_on_start = \
         get_desired_value(
             'default_break_on_start',
-            kwargs,
-            ctx.instance.runtime_properties,
-            ctx.node.properties.get('resource_config'))
+            args=kwargs,
+            instance_attr={},
+            node_prop=ctx.node.properties.get('resource_config'))
     breakpoint_executions = BreakpointStateExecutions(
         node_id=ctx.node.id,
         instance_id=ctx.instance.id,
@@ -46,14 +52,20 @@ def start(ctx, **kwargs):
 
 @operation
 def stop(ctx, **kwargs):
+    """
+    When break_on_stop (or initially default_break_on_stop) is enabled
+    it raises OperationRetry.
+    :param ctx: Cloudify context
+    :param kwargs: The parameters given from the user
+    """
     break_error = OperationRetry(BREAK_MSG)
 
     default_break_on_stop = \
         get_desired_value(
             'default_break_on_stop',
-            kwargs,
-            ctx.instance.runtime_properties,
-            ctx.node.properties.get('resource_config'))
+            args=kwargs,
+            instance_attr={},
+            node_prop=ctx.node.properties.get('resource_config'))
     breakpoint_executions = BreakpointStateExecutions(
         node_id=ctx.node.id,
         instance_id=ctx.instance.id,
@@ -73,6 +85,12 @@ def stop(ctx, **kwargs):
 
 @operation
 def check(ctx, **kwargs):
+    """
+    If the user executing the operation is not in the nodes property
+    authorization.users it raises NonRecoverableError.
+    :param ctx: Cloudify context
+    :param kwargs: The parameters given from the user
+    """
     execution_creator_username = ctx.execution_creator_username
     if execution_creator_username in \
             ctx.node.properties.get('authorization').get('users'):

@@ -278,7 +278,7 @@ class BreakpointNodeTest(BreakpointTestBase):
             test_name='BreakpointTestCase',
             test_properties={
                 'resource_config': {
-                    'default_break_on_stop': False
+                    'default_break_on_stop': True
                 },
                 'authorization': {
                     'users': ['Alice']
