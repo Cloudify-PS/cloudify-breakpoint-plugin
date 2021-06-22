@@ -36,12 +36,16 @@ def start(ctx, **kwargs):
     breakpoint_executions = BreakpointStateExecutions(
         node_id=ctx.node.id,
         instance_id=ctx.instance.id,
-        workflow_name=set_breakpoint_state.__name__,
+        workflow_id=ctx.workflow_id,
         deployment_id=ctx.deployment.id,
+        breakpoint_state_workflow_name=set_breakpoint_state.__name__,
         logger=ctx.logger)
     active_breakpoint = breakpoint_executions.get_valid_execution()
-    if not active_breakpoint and default_break_on_start:
-        raise break_error
+    if not active_breakpoint:
+        ctx.logger.debug('Applying default_break_on_start ({}).'
+                         .format(default_break_on_start))
+        if default_break_on_start:
+            raise break_error
     if active_breakpoint \
             and active_breakpoint.get('parameters').get('break_on_start'):
         raise break_error
@@ -69,12 +73,16 @@ def stop(ctx, **kwargs):
     breakpoint_executions = BreakpointStateExecutions(
         node_id=ctx.node.id,
         instance_id=ctx.instance.id,
-        workflow_name=set_breakpoint_state.__name__,
+        workflow_id=ctx.workflow_id,
         deployment_id=ctx.deployment.id,
+        breakpoint_state_workflow_name=set_breakpoint_state.__name__,
         logger=ctx.logger)
     active_breakpoint = breakpoint_executions.get_valid_execution()
-    if not active_breakpoint and default_break_on_stop:
-        raise break_error
+    if not active_breakpoint:
+        ctx.logger.debug('Applying default_break_on_stop ({}).'
+                         .format(default_break_on_stop))
+        if default_break_on_stop:
+            raise break_error
     if active_breakpoint and \
             active_breakpoint.get('parameters').get('break_on_stop'):
         raise break_error

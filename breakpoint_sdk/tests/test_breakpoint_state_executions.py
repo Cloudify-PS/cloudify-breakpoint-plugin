@@ -54,8 +54,9 @@ class BreakpointStateExecutionsTest(TestCase):
         breakpoint_executions = BreakpointStateExecutions(
             node_id='BreakpointTestCase',
             instance_id='BreakpointTestCase_123',
-            workflow_name='set_breakpoint_state',
+            workflow_id='install',
             deployment_id='BreakpointTestCase',
+            breakpoint_state_workflow_name='set_breakpoint_state',
             logger=MagicMock())
 
         valid_execution = breakpoint_executions.get_valid_execution()
@@ -104,8 +105,9 @@ class BreakpointStateExecutionsTest(TestCase):
         breakpoint_executions = BreakpointStateExecutions(
             node_id='BreakpointTestCase',
             instance_id='BreakpointTestCase_123',
-            workflow_name='set_breakpoint_state',
+            workflow_id='install',
             deployment_id='BreakpointTestCase',
+            breakpoint_state_workflow_name='set_breakpoint_state',
             logger=MagicMock())
 
         valid_execution = \
@@ -116,6 +118,14 @@ class BreakpointStateExecutionsTest(TestCase):
 
     def test_get_latest(self):
         executions = [
+            {
+                'id': 'a9b18e4d-f181-4fe0-89d5-a450330c2fff',
+                'created_at': '2021-06-17T10:26:18.304Z',
+                'workflow_id': 'install',
+                'deployment_id': 'BreakpointTestCase',
+                'status_display': 'completed',
+                'created_by': 'admin'
+            },
             {
                 'id': 'ab7452fc-bdac-41f1-952b-5e1789346ad0',
                 'created_at': '2021-06-17T10:23:26.975Z',
@@ -147,8 +157,9 @@ class BreakpointStateExecutionsTest(TestCase):
         breakpoint_executions = BreakpointStateExecutions(
             node_id='BreakpointTestCase',
             instance_id='BreakpointTestCase_123',
-            workflow_name='set_breakpoint_state',
+            workflow_id='install',
             deployment_id='BreakpointTestCase',
+            breakpoint_state_workflow_name='set_breakpoint_state',
             logger=MagicMock())
 
         valid_execution = \
@@ -175,8 +186,9 @@ class BreakpointStateExecutionsTest(TestCase):
         breakpoint_executions = BreakpointStateExecutions(
             node_id='BreakpointTestCase',
             instance_id='BreakpointTestCase_123',
-            workflow_name='set_breakpoint_state',
+            workflow_id='install',
             deployment_id='BreakpointTestCase',
+            breakpoint_state_workflow_name='set_breakpoint_state',
             logger=MagicMock())
 
         result = breakpoint_executions.is_node_related(executions)
@@ -201,8 +213,9 @@ class BreakpointStateExecutionsTest(TestCase):
         breakpoint_executions = BreakpointStateExecutions(
             node_id='BreakpointTestCase',
             instance_id='BreakpointTestCase_123',
-            workflow_name='set_breakpoint_state',
+            workflow_id='install',
             deployment_id='BreakpointTestCase',
+            breakpoint_state_workflow_name='set_breakpoint_state',
             logger=MagicMock())
 
         result = breakpoint_executions.is_node_related(executions)
@@ -228,8 +241,9 @@ class BreakpointStateExecutionsTest(TestCase):
         breakpoint_executions = BreakpointStateExecutions(
             node_id='BreakpointTestCase',
             instance_id='BreakpointTestCase_123',
-            workflow_name='set_breakpoint_state',
+            workflow_id='install',
             deployment_id='BreakpointTestCase',
+            breakpoint_state_workflow_name='set_breakpoint_state',
             logger=MagicMock())
 
         result = breakpoint_executions.is_node_related(executions)
@@ -254,8 +268,9 @@ class BreakpointStateExecutionsTest(TestCase):
         breakpoint_executions = BreakpointStateExecutions(
             node_id='BreakpointTestCase',
             instance_id='BreakpointTestCase_123',
-            workflow_name='set_breakpoint_state',
+            workflow_id='install',
             deployment_id='BreakpointTestCase',
+            breakpoint_state_workflow_name='set_breakpoint_state',
             logger=MagicMock())
 
         result = breakpoint_executions.is_node_related(executions)
@@ -280,8 +295,9 @@ class BreakpointStateExecutionsTest(TestCase):
         breakpoint_executions = BreakpointStateExecutions(
             node_id='BreakpointTestCase',
             instance_id='BreakpointTestCase_123',
-            workflow_name='set_breakpoint_state',
+            workflow_id='install',
             deployment_id='BreakpointTestCase',
+            breakpoint_state_workflow_name='set_breakpoint_state',
             logger=MagicMock())
 
         result = breakpoint_executions.is_valid_execution(executions)
@@ -306,8 +322,9 @@ class BreakpointStateExecutionsTest(TestCase):
         breakpoint_executions = BreakpointStateExecutions(
             node_id='BreakpointTestCase',
             instance_id='BreakpointTestCase_123',
-            workflow_name='set_breakpoint_state',
+            workflow_id='install',
             deployment_id='BreakpointTestCase',
+            breakpoint_state_workflow_name='set_breakpoint_state',
             logger=MagicMock())
 
         result = breakpoint_executions.is_valid_execution(executions)
@@ -332,8 +349,9 @@ class BreakpointStateExecutionsTest(TestCase):
         breakpoint_executions = BreakpointStateExecutions(
             node_id='BreakpointTestCase',
             instance_id='BreakpointTestCase_123',
-            workflow_name='set_breakpoint_state',
+            workflow_id='install',
             deployment_id='BreakpointTestCase',
+            breakpoint_state_workflow_name='set_breakpoint_state',
             logger=MagicMock())
 
         result = breakpoint_executions.is_valid_execution(executions)

@@ -8,12 +8,13 @@ EXECUTION_TIMESTAMP_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 
 
 class BreakpointStateExecutions:
-    def __init__(self, node_id, instance_id,
-                 workflow_name, deployment_id, logger=None):
+    def __init__(self, node_id, instance_id, workflow_id, deployment_id,
+                 breakpoint_state_workflow_name, logger=None):
         self.node_id = node_id
         self.instance_id = instance_id
-        self.workflow_name = workflow_name
+        self.workflow_id = workflow_id
         self.deployment_id = deployment_id
+        self.breakpoint_state_workflow_name = breakpoint_state_workflow_name
         self.logger = logger
 
     def is_node_related(self, execution):
@@ -24,13 +25,15 @@ class BreakpointStateExecutions:
                or execution.get('parameters').get('all_breakpoints')
 
     def is_valid_execution(self, execution):
-        return execution.get('workflow_id') == self.workflow_name \
-               and execution.get('status_display') == 'completed'
+        return execution.get('workflow_id') \
+               == self.breakpoint_state_workflow_name \
+               and execution.get('status_display') \
+               == 'completed'
 
     def get_latest_execution(self, executions):
         drop_restarts = dropwhile(
             lambda x: x.get('deployment_id') == self.deployment_id
-            and x.get('workflow_id') == self.workflow_name,
+            and x.get('workflow_id') == self.workflow_id,
             executions)
         try:
             latest_execution = next(drop_restarts)
@@ -38,8 +41,8 @@ class BreakpointStateExecutions:
             return None
         if self.is_valid_execution(latest_execution) and \
                 self.is_node_related(latest_execution):
-            self.logger.info('Applying the latest execution: ID {}, '
-                             'by {}, at {}.'.format(
+            self.logger.debug('Applying the latest execution: ID {}, '
+                              'by {}, at {}.'.format(
                                 latest_execution.get('id'),
                                 latest_execution.get('created_by'),
                                 latest_execution.get('created_at')))
@@ -55,8 +58,8 @@ class BreakpointStateExecutions:
             valid_execution = next(permanent_executions)
         except StopIteration:  # when iterator is empty
             return None
-        self.logger.info('Applying the permanent execution: ID {}, '
-                         'by {}, at {}.'.format(
+        self.logger.debug('Applying the permanent execution: ID {}, '
+                          'by {}, at {}.'.format(
                             valid_execution.get('id'),
                             valid_execution.get('created_by'),
                             valid_execution.get('created_at')))
