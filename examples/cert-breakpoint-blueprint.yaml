@@ -1,0 +1,45 @@
+tosca_definitions_version: cloudify_dsl_1_3
+
+imports:
+  - https://cloudify.co/spec/cloudify/5.0.5/types.yaml
+  - plugin:cloudify-breakpoint-plugin
+  - plugin:cloudify-utilities-plugin # please REMEMBER to install before uploading this blueprint!
+
+inputs:
+  authorized_users:
+    description: >
+      The list of usernames that are allowed to execute set_breakpoint_state.
+    type: list
+    default: []
+
+dsl_definitions:
+  authorization: &authorization
+    users: { get_input: authorized_users }
+
+node_templates:
+
+    example-breakpoint:
+      type: cloudify.nodes.breakpoint.Breakpoint
+      properties:
+        authorization: *authorization
+        resource_config:
+          default_break_on_start: true
+          default_break_on_stop: true
+
+    example-key:
+      type: cloudify.keys.nodes.RSAKey
+      properties:
+        resource_config:
+          key_name: cert_key
+          openssh_format: true
+        use_secret_store: true
+        use_secrets_if_exist: true
+      interfaces:
+        cloudify.interfaces.lifecycle:
+          create:
+            implementation: keys.cloudify_ssh_key.operations.create
+            inputs:
+              store_private_key_material: true
+      relationships:
+        - type: cloudify.relationships.depends_on
+          target: example-breakpoint
