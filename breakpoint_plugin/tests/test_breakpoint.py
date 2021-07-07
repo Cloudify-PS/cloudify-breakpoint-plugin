@@ -77,7 +77,7 @@ class BreakpointNodeTest(BreakpointTestBase):
             },
             ctx_operation_name='cloudify.interfaces.lifecycle.start')
 
-        with self.assertRaises(NonRecoverableError) as err:
+        with self.assertRaises(OperationRetry) as err:
             start(current_ctx.ctx)
             self.assertEqual(str(err), self.expected_msg)
 
@@ -111,7 +111,7 @@ class BreakpointNodeTest(BreakpointTestBase):
             },
             ctx_operation_name='cloudify.interfaces.lifecycle.start')
 
-        with self.assertRaises(NonRecoverableError) as err:
+        with self.assertRaises(OperationRetry) as err:
             start(current_ctx.ctx)
             self.assertEqual(str(err), self.expected_msg)
 
@@ -307,7 +307,7 @@ class BreakpointNodeTest(BreakpointTestBase):
             },
             ctx_operation_name='cloudify.interfaces.lifecycle.start')
 
-        with self.assertRaises(NonRecoverableError) as err:
+        with self.assertRaises(OperationRetry) as err:
             start(current_ctx.ctx)
             self.assertEqual(str(err), self.expected_msg)
 
@@ -361,7 +361,7 @@ class BreakpointNodeTest(BreakpointTestBase):
             },
             ctx_operation_name='cloudify.interfaces.lifecycle.start')
 
-        with self.assertRaises(NonRecoverableError) as err:
+        with self.assertRaises(OperationRetry) as err:
             start(current_ctx.ctx)
             self.assertEqual(str(err), self.expected_msg)
 
@@ -408,7 +408,7 @@ class BreakpointNodeTest(BreakpointTestBase):
             },
             ctx_operation_name='cloudify.interfaces.lifecycle.start')
 
-        with self.assertRaises(NonRecoverableError) as err:
+        with self.assertRaises(OperationRetry) as err:
             start(current_ctx.ctx)
             self.assertEqual(str(err), self.expected_msg)
 

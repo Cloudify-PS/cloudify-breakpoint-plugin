@@ -21,11 +21,11 @@ BREAK_MSG = 'Breakpoint active. An allowed user must deactivate ' \
 def start(ctx, **kwargs):
     """
     When break_on_install (or initially default_break_on_install) is enabled
-    it raises NonRecoverableError.
+    it raises OperationRetry.
     :param ctx: Cloudify context
     :param kwargs: The parameters given from the user
     """
-    break_error = NonRecoverableError(BREAK_MSG)
+    break_error = OperationRetry(BREAK_MSG)
 
     default_break_on_install = \
         get_desired_value(

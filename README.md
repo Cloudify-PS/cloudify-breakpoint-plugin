@@ -19,7 +19,7 @@ Properties:
     - **default_break_on_uninstall** - initial flag applied in `cloudify.interfaces.lifecycle.delete`, analogous to _default_break_on_install_
 
 Operations:
-- `cloudify.interfaces.lifecycle.start`- when _break_on_install_ (or initially _default_break_on_install_) is enabled it raises `NonRecoverableError`; this operation is executed on install (see [Cloudify Built-in Workflows](https://docs.cloudify.co/latest/working_with/workflows/built-in-workflows/))
+- `cloudify.interfaces.lifecycle.start`- when _break_on_install_ (or initially _default_break_on_install_) is enabled it raises `OperationRetry`; this operation is executed on install (see [Cloudify Built-in Workflows](https://docs.cloudify.co/latest/working_with/workflows/built-in-workflows/))
 - `cloudify.interfaces.lifecycle.delete` - when _break_on_uninstall_ (or initially _default_break_on_uninstall_) is enabled it raises `OperationRetry`; this operation is executed on uninstall (see [Cloudify Built-in Workflows](https://docs.cloudify.co/latest/working_with/workflows/built-in-workflows/))
 - `cloudify.interfaces.breakpoint.check` - If the user executing the operation is not in the nodes property authorization.users raise `NonRecoverableError`
 
