@@ -55,7 +55,7 @@ def start(ctx, **kwargs):
 
 
 @operation
-def stop(ctx, **kwargs):
+def delete(ctx, **kwargs):
     """
     When break_on_uninstall (or initially default_break_on_uninstall)
     is enabled it raises OperationRetry.

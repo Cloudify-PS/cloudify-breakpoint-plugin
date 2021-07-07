@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 
 # Local imports
 from breakpoint_plugin.tests.base import BreakpointTestBase
-from breakpoint_plugin.resources.breakpoint import start, stop, check
+from breakpoint_plugin.resources.breakpoint import start, delete, check
 from cloudify.exceptions import NonRecoverableError, OperationRetry
 from cloudify.state import current_ctx
 
@@ -216,7 +216,7 @@ class BreakpointNodeTest(BreakpointTestBase):
 
     @patch('breakpoint_sdk.resources.breakpoint_state_executions'
            '.get_rest_client')
-    def test_stop_nonpermanent(self, get_rest_client):
+    def test_delete_nonpermanent(self, get_rest_client):
         get_rest_client.return_value = self.get_mock_rest_client(executions=[
             {
                 'id': 'ab7452fc-bdac-41f1-952b-5e1789346acf',
@@ -242,15 +242,15 @@ class BreakpointNodeTest(BreakpointTestBase):
                     'users': ['Alice']
                 }
             },
-            ctx_operation_name='cloudify.interfaces.lifecycle.stop')
+            ctx_operation_name='cloudify.interfaces.lifecycle.delete')
 
         with self.assertRaises(OperationRetry) as err:
-            stop(current_ctx.ctx)
+            delete(current_ctx.ctx)
             self.assertEqual(str(err), self.expected_msg)
 
     @patch('breakpoint_sdk.resources.breakpoint_state_executions'
            '.get_rest_client')
-    def test_stop_permanent_open_breakpoint(self, get_rest_client):
+    def test_delete_permanent_open_breakpoint(self, get_rest_client):
         get_rest_client.return_value = self.get_mock_rest_client(executions=[
             {
                 'id': 'ab7452fc-bdac-41f1-952b-5e1789346acf',
@@ -286,7 +286,7 @@ class BreakpointNodeTest(BreakpointTestBase):
             },
             ctx_operation_name='cloudify.interfaces.lifecycle.start')
 
-        stop(current_ctx.ctx)
+        delete(current_ctx.ctx)
 
         # assert
         # no error raised
@@ -325,10 +325,10 @@ class BreakpointNodeTest(BreakpointTestBase):
                     'users': ['Alice']
                 }
             },
-            ctx_operation_name='cloudify.interfaces.lifecycle.stop')
+            ctx_operation_name='cloudify.interfaces.lifecycle.delete')
 
         with self.assertRaises(OperationRetry) as err:
-            stop(current_ctx.ctx)
+            delete(current_ctx.ctx)
             self.assertEqual(str(err), self.expected_msg)
 
     @patch('breakpoint_sdk.resources.breakpoint_state_executions'

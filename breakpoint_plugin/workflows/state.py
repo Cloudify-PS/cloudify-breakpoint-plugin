@@ -40,7 +40,7 @@ def set_breakpoint_state(node_ids=None,
     :param break_on_install: specifies if the breakpoint should stop on
            `cloudify.interfaces.lifecycle.start` lifecycle operation
     :param break_on_uninstall: specifies if the breakpoint should stop on
-           `cloudify.interfaces.lifecycle.stop` lifecycle operation
+           `cloudify.interfaces.lifecycle.delete` lifecycle operation
     :param permanent: specifies that this setting of the breakpoints is
            permanent, if false it will apply only to the next execution
     :param ctx: Cloudify context

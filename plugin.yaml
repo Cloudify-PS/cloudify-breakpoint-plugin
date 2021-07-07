@@ -39,7 +39,7 @@ node_types:
     interfaces:
       cloudify.interfaces.lifecycle:
         start: breakpoint.breakpoint_plugin.resources.breakpoint.start
-        stop: breakpoint.breakpoint_plugin.resources.breakpoint.stop
+        delete: breakpoint.breakpoint_plugin.resources.breakpoint.delete
       cloudify.interfaces.breakpoint:
         check: breakpoint.breakpoint_plugin.resources.breakpoint.check
 
@@ -59,7 +59,7 @@ workflows:
         type: boolean
         default: true
       break_on_uninstall:
-        description: Specifies if the breakpoint should stop on stop lifecycle operation.
+        description: Specifies if the breakpoint should stop on delete lifecycle operation.
         type: boolean
         default: true
       permanent:
