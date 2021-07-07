@@ -227,11 +227,10 @@ class BreakpointStateExecutionsTest(TestCase):
             'id': 'ab7452fc-bdac-41f1-952b-5e1789346ad0',
             'created_at': '2021-06-17T10:23:26.975Z',
             'parameters': {
-                'node_ids': ['AnotherTestCase'],
-                'node_instance_ids': ['AnotherTestCase_123'],
+                'node_ids': [],
+                'node_instance_ids': [],
                 'permanent': False,
-                'break_on_start': True,
-                'all_breakpoints': True
+                'break_on_start': True
             },
             'workflow_id': 'set_breakpoint_state',
             'status_display': 'completed',

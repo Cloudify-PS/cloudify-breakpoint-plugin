@@ -18,11 +18,14 @@ class BreakpointStateExecutions:
         self.logger = logger
 
     def is_node_related(self, execution):
-        return self.node_id in \
-               (execution.get('parameters').get('node_ids') or []) \
-               or self.instance_id in \
-               (execution.get('parameters').get('node_instance_ids') or []) \
-               or execution.get('parameters').get('all_breakpoints')
+        node_ids = execution.get('parameters').get('node_ids') or []
+        node_instance_ids = \
+            execution.get('parameters').get('node_instance_ids') or []
+        # apply to all nodes if both node_ids and node_instance_ids are empty
+        if not (node_ids and node_instance_ids):
+            return True
+        return self.node_id in node_ids \
+            or self.instance_id in node_instance_ids
 
     def is_valid_execution(self, execution):
         return execution.get('workflow_id') \

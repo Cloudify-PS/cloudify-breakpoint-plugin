@@ -54,10 +54,6 @@ workflows:
       node_instance_ids:
         description: The list of node instance IDs to open breakpoint for.
         type: list
-      all_breakpoints:
-        description: Override the node (instance) id lists and open all breakpoints.
-        type: boolean
-        default: false
       break_on_start:
         description: Specifies if the breakpoint should stop on start lifecycle operation.
         type: boolean

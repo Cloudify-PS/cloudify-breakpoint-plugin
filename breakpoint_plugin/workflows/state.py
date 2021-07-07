@@ -26,7 +26,6 @@ def execution_creator_auth(users, execution_creator_username):
 @workflow
 def set_breakpoint_state(node_ids=None,
                          node_instance_ids=None,
-                         all_breakpoints=False,
                          break_on_start=True,
                          break_on_stop=True,
                          permanent=False,
@@ -38,8 +37,6 @@ def set_breakpoint_state(node_ids=None,
     :param node_instance_ids: list of IDs of
            `cloudify.nodes.breakpoint.Breakpoint` node instance, node ID
            is used interchangeably
-    :param all_breakpoints: override the _ode (instance) ID lists and open
-           all breakpoints
     :param break_on_start: specifies if the breakpoint should stop on
            `cloudify.interfaces.lifecycle.start` lifecycle operation
     :param break_on_stop: specifies if the breakpoint should stop on

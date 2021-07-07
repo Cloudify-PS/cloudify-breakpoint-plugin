@@ -342,8 +342,7 @@ class BreakpointNodeTest(BreakpointTestBase):
                     'node_ids': None,
                     'node_instance_ids': None,
                     'permanent': False,
-                    'break_on_start': True,
-                    'all_breakpoints': True
+                    'break_on_start': True
                 },
                 'workflow_id': 'set_breakpoint_state',
                 'status_display': 'completed',
