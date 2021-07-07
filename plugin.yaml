@@ -57,11 +57,11 @@ workflows:
       break_on_install:
         description: Specifies if the breakpoint should stop on start lifecycle operation.
         type: boolean
-        default: true
+        default: false
       break_on_uninstall:
         description: Specifies if the breakpoint should stop on delete lifecycle operation.
         type: boolean
-        default: true
+        default: false
       permanent:
         description: Specifies that this setting of the breakpoints is permanent. If false if will apply only to the next execution.
         type: boolean

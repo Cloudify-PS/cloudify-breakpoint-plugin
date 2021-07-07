@@ -26,8 +26,8 @@ def execution_creator_auth(users, execution_creator_username):
 @workflow
 def set_breakpoint_state(node_ids=None,
                          node_instance_ids=None,
-                         break_on_install=True,
-                         break_on_uninstall=True,
+                         break_on_install=False,
+                         break_on_uninstall=False,
                          permanent=False,
                          ctx=None):
     """
