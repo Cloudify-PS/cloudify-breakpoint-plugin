@@ -18,7 +18,10 @@ def has_admin_role(username):
     :return: True if user has sys_admin role, otherwise False
     """
     client = get_rest_client()
-    role = client.users.get(username).get('role')
-    if role == 'sys_admin':
-        return True
-    return False
+    role = None
+    try:
+        role = client.users.get(username).get('role')
+    finally:
+        if role == 'sys_admin':
+            return True
+        return False
