@@ -33,8 +33,8 @@ Parameters:
 
 - **node_ids** - list of IDs of `cloudify.nodes.breakpoint.Breakpoint`
 - **node_instance_ids** - list of IDs of `cloudify.nodes.breakpoint.Breakpoint` node instance, node ID is used interchangeably
-- **break_on_install**  (default: true) - specifies if the breakpoint should stop on `cloudify.interfaces.lifecycle.start` lifecycle operation
-- **break_on_uninstall** (default: true) - specifies if the breakpoint should stop on `cloudify.interfaces.lifecycle.delete` lifecycle operation
+- **break_on_install**  (default: false) - specifies if the breakpoint should stop on `cloudify.interfaces.lifecycle.start` lifecycle operation
+- **break_on_uninstall** (default: false) - specifies if the breakpoint should stop on `cloudify.interfaces.lifecycle.delete` lifecycle operation
 - **permanent** (default: false) - specifies that this setting of the breakpoints is permanent, if false it will apply only to the next execution
 
 
