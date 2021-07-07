@@ -37,7 +37,7 @@ class BreakpointNodeTest(BreakpointTestBase):
                     'node_ids': None,
                     'node_instance_ids': ['BreakpointTestCase'],
                     'permanent': True,
-                    'break_on_start': False
+                    'break_on_install': False
                 },
                 'workflow_id': 'set_breakpoint_state',
                 'status_display': 'completed',
@@ -50,7 +50,7 @@ class BreakpointNodeTest(BreakpointTestBase):
                     'node_ids': None,
                     'node_instance_ids': ['BreakpointTestCase'],
                     'permanent': True,
-                    'break_on_start': True
+                    'break_on_install': True
                 },
                 'workflow_id': 'set_breakpoint_state',
                 'status_display': 'completed',
@@ -69,7 +69,7 @@ class BreakpointNodeTest(BreakpointTestBase):
             test_name='BreakpointTestCase',
             test_properties={
                 'resource_config': {
-                    'default_break_on_start': False
+                    'default_break_on_install': False
                 },
                 'authorization': {
                     'users': ['Alice']
@@ -92,7 +92,7 @@ class BreakpointNodeTest(BreakpointTestBase):
                     'node_ids': None,
                     'node_instance_ids': ['BreakpointTestCase'],
                     'permanent': False,
-                    'break_on_start': True
+                    'break_on_install': True
                 },
                 'workflow_id': 'set_breakpoint_state',
                 'status_display': 'completed',
@@ -103,7 +103,7 @@ class BreakpointNodeTest(BreakpointTestBase):
             test_name='BreakpointTestCase',
             test_properties={
                 'resource_config': {
-                    'default_break_on_start': False
+                    'default_break_on_install': False
                 },
                 'authorization': {
                     'users': ['Alice']
@@ -126,7 +126,7 @@ class BreakpointNodeTest(BreakpointTestBase):
                     'node_ids': None,
                     'node_instance_ids': ['BreakpointTestCase'],
                     'permanent': False,
-                    'break_on_start': False
+                    'break_on_install': False
                 },
                 'workflow_id': 'set_breakpoint_state',
                 'status_display': 'completed',
@@ -145,7 +145,7 @@ class BreakpointNodeTest(BreakpointTestBase):
             test_name='BreakpointTestCase',
             test_properties={
                 'resource_config': {
-                    'default_break_on_start': False
+                    'default_break_on_install': False
                 },
                 'authorization': {
                     'users': ['Alice']
@@ -169,7 +169,7 @@ class BreakpointNodeTest(BreakpointTestBase):
                     'node_ids': None,
                     'node_instance_ids': ['BreakpointTestCase'],
                     'permanent': False,
-                    'break_on_start': False
+                    'break_on_install': False
                 },
                 'workflow_id': 'set_breakpoint_state',
                 'status_display': 'completed',
@@ -180,7 +180,7 @@ class BreakpointNodeTest(BreakpointTestBase):
             test_name='BreakpointTestCase',
             test_properties={
                 'resource_config': {
-                    'default_break_on_start': False
+                    'default_break_on_install': False
                 },
                 'authorization': {
                     'users': ['Alice']
@@ -195,13 +195,13 @@ class BreakpointNodeTest(BreakpointTestBase):
 
     @patch('breakpoint_sdk.resources.breakpoint_state_executions'
            '.get_rest_client')
-    def test_default_break_on_start_false(self, get_rest_client):
+    def test_default_break_on_install_false(self, get_rest_client):
         get_rest_client.return_value = self.get_mock_rest_client(executions=[])
         self._prepare_context_for_operation(
             test_name='BreakpointTestCase',
             test_properties={
                 'resource_config': {
-                    'default_break_on_start': False
+                    'default_break_on_install': False
                 },
                 'authorization': {
                     'users': ['Alice']
@@ -225,7 +225,7 @@ class BreakpointNodeTest(BreakpointTestBase):
                     'node_ids': ['BreakpointTestCase'],
                     'node_instance_ids': None,
                     'permanent': False,
-                    'break_on_stop': True
+                    'break_on_uninstall': True
                 },
                 'workflow_id': 'set_breakpoint_state',
                 'status_display': 'completed',
@@ -236,7 +236,7 @@ class BreakpointNodeTest(BreakpointTestBase):
             test_name='BreakpointTestCase',
             test_properties={
                 'resource_config': {
-                    'default_break_on_stop': False
+                    'default_break_on_uninstall': False
                 },
                 'authorization': {
                     'users': ['Alice']
@@ -259,7 +259,7 @@ class BreakpointNodeTest(BreakpointTestBase):
                     'node_ids': None,
                     'node_instance_ids': ['BreakpointTestCase'],
                     'permanent': True,
-                    'break_on_stop': False
+                    'break_on_uninstall': False
                 },
                 'workflow_id': 'set_breakpoint_state',
                 'status_display': 'completed',
@@ -278,7 +278,7 @@ class BreakpointNodeTest(BreakpointTestBase):
             test_name='BreakpointTestCase',
             test_properties={
                 'resource_config': {
-                    'default_break_on_stop': True
+                    'default_break_on_uninstall': True
                 },
                 'authorization': {
                     'users': ['Alice']
@@ -293,13 +293,13 @@ class BreakpointNodeTest(BreakpointTestBase):
 
     @patch('breakpoint_sdk.resources.breakpoint_state_executions'
            '.get_rest_client')
-    def test_default_break_on_start_true(self, get_rest_client):
+    def test_default_break_on_install_true(self, get_rest_client):
         get_rest_client.return_value = self.get_mock_rest_client(executions=[])
         self._prepare_context_for_operation(
             test_name='BreakpointTestCase',
             test_properties={
                 'resource_config': {
-                    'default_break_on_start': True
+                    'default_break_on_install': True
                 },
                 'authorization': {
                     'users': ['Alice']
@@ -313,13 +313,13 @@ class BreakpointNodeTest(BreakpointTestBase):
 
     @patch('breakpoint_sdk.resources.breakpoint_state_executions'
            '.get_rest_client')
-    def test_default_break_on_stop_true(self, get_rest_client):
+    def test_default_break_on_uninstall_true(self, get_rest_client):
         get_rest_client.return_value = self.get_mock_rest_client(executions=[])
         self._prepare_context_for_operation(
             test_name='BreakpointTestCase',
             test_properties={
                 'resource_config': {
-                    'default_break_on_stop': True
+                    'default_break_on_uninstall': True
                 },
                 'authorization': {
                     'users': ['Alice']
@@ -342,7 +342,7 @@ class BreakpointNodeTest(BreakpointTestBase):
                     'node_ids': None,
                     'node_instance_ids': None,
                     'permanent': False,
-                    'break_on_start': True
+                    'break_on_install': True
                 },
                 'workflow_id': 'set_breakpoint_state',
                 'status_display': 'completed',
@@ -353,7 +353,7 @@ class BreakpointNodeTest(BreakpointTestBase):
             test_name='BreakpointTestCase',
             test_properties={
                 'resource_config': {
-                    'default_break_on_start': False
+                    'default_break_on_install': False
                 },
                 'authorization': {
                     'users': ['Alice']
@@ -376,7 +376,7 @@ class BreakpointNodeTest(BreakpointTestBase):
                     'node_ids': None,
                     'node_instance_ids': ['BreakpointTestCase'],
                     'permanent': True,
-                    'break_on_start': False
+                    'break_on_install': False
                 },
                 'workflow_id': 'set_breakpoint_state',
                 'status_display': 'completed',
@@ -389,7 +389,7 @@ class BreakpointNodeTest(BreakpointTestBase):
                     'node_ids': None,
                     'node_instance_ids': ['BreakpointTestCase'],
                     'permanent': False,
-                    'break_on_start': True
+                    'break_on_install': True
                 },
                 'workflow_id': 'set_breakpoint_state',
                 'status_display': 'completed',
@@ -400,7 +400,7 @@ class BreakpointNodeTest(BreakpointTestBase):
             test_name='BreakpointTestCase',
             test_properties={
                 'resource_config': {
-                    'default_break_on_start': False
+                    'default_break_on_install': False
                 },
                 'authorization': {
                     'users': ['Alice']
@@ -420,7 +420,7 @@ class BreakpointNodeTest(BreakpointTestBase):
             test_name='BreakpointTestCase',
             test_properties={
                 'resource_config': {
-                    'default_break_on_start': False
+                    'default_break_on_install': False
                 },
                 'authorization': {
                     'users': ['Alice']
@@ -438,7 +438,7 @@ class BreakpointNodeTest(BreakpointTestBase):
             test_name='BreakpointTestCase',
             test_properties={
                 'resource_config': {
-                    'default_break_on_start': False
+                    'default_break_on_install': False
                 },
                 'authorization': {
                     'users': [
@@ -463,7 +463,7 @@ class BreakpointNodeTest(BreakpointTestBase):
             test_name='BreakpointTestCase',
             test_properties={
                 'resource_config': {
-                    'default_break_on_start': False
+                    'default_break_on_install': False
                 },
                 'authorization': {
                     'users': ['Alice']

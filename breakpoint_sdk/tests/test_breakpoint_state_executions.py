@@ -30,7 +30,7 @@ class BreakpointStateExecutionsTest(TestCase):
                     'node_ids': None,
                     'node_instance_ids': ['BreakpointTestCase_123'],
                     'permanent': False,
-                    'break_on_start': True
+                    'break_on_install': True
                 },
                 'workflow_id': 'set_breakpoint_state',
                 'status_display': 'completed',
@@ -43,7 +43,7 @@ class BreakpointStateExecutionsTest(TestCase):
                     'node_ids': None,
                     'node_instance_ids': ['BreakpointTestCase_123'],
                     'permanent': True,
-                    'break_on_start': False
+                    'break_on_install': False
                 },
                 'workflow_id': 'set_breakpoint_state',
                 'status_display': 'completed',
@@ -81,7 +81,7 @@ class BreakpointStateExecutionsTest(TestCase):
                     'node_ids': None,
                     'node_instance_ids': ['BreakpointTestCase_123'],
                     'permanent': True,
-                    'break_on_start': True
+                    'break_on_install': True
                 },
                 'workflow_id': 'set_breakpoint_state',
                 'status_display': 'completed',
@@ -94,7 +94,7 @@ class BreakpointStateExecutionsTest(TestCase):
                     'node_ids': None,
                     'node_instance_ids': ['BreakpointTestCase_123'],
                     'permanent': True,
-                    'break_on_start': False
+                    'break_on_install': False
                 },
                 'workflow_id': 'set_breakpoint_state',
                 'status_display': 'completed',
@@ -133,7 +133,7 @@ class BreakpointStateExecutionsTest(TestCase):
                     'node_ids': None,
                     'node_instance_ids': ['BreakpointTestCase_123'],
                     'permanent': False,
-                    'break_on_start': True
+                    'break_on_install': True
                 },
                 'workflow_id': 'set_breakpoint_state',
                 'status_display': 'completed',
@@ -146,7 +146,7 @@ class BreakpointStateExecutionsTest(TestCase):
                     'node_ids': None,
                     'node_instance_ids': ['BreakpointTestCase_123'],
                     'permanent': True,
-                    'break_on_start': False
+                    'break_on_install': False
                 },
                 'workflow_id': 'set_breakpoint_state',
                 'status_display': 'completed',
@@ -176,7 +176,7 @@ class BreakpointStateExecutionsTest(TestCase):
                 'node_ids': ['BreakpointTestCase'],
                 'node_instance_ids': None,
                 'permanent': False,
-                'break_on_start': True
+                'break_on_install': True
             },
             'workflow_id': 'set_breakpoint_state',
             'status_display': 'completed',
@@ -203,7 +203,7 @@ class BreakpointStateExecutionsTest(TestCase):
                 'node_ids': None,
                 'node_instance_ids': ['BreakpointTestCase_123'],
                 'permanent': False,
-                'break_on_start': True
+                'break_on_install': True
             },
             'workflow_id': 'set_breakpoint_state',
             'status_display': 'completed',
@@ -230,7 +230,7 @@ class BreakpointStateExecutionsTest(TestCase):
                 'node_ids': [],
                 'node_instance_ids': [],
                 'permanent': False,
-                'break_on_start': True
+                'break_on_install': True
             },
             'workflow_id': 'set_breakpoint_state',
             'status_display': 'completed',
@@ -257,7 +257,7 @@ class BreakpointStateExecutionsTest(TestCase):
                 'node_ids': ['AnotherTestCase'],
                 'node_instance_ids': ['AnotherTestCase_123'],
                 'permanent': False,
-                'break_on_start': True
+                'break_on_install': True
             },
             'workflow_id': 'set_breakpoint_state',
             'status_display': 'completed',
@@ -284,7 +284,7 @@ class BreakpointStateExecutionsTest(TestCase):
                 'node_ids': None,
                 'node_instance_ids': ['BreakpointTestCase_123'],
                 'permanent': False,
-                'break_on_start': True
+                'break_on_install': True
             },
             'workflow_id': 'set_breakpoint_state',
             'status_display': 'completed',
@@ -311,7 +311,7 @@ class BreakpointStateExecutionsTest(TestCase):
                 'node_ids': None,
                 'node_instance_ids': ['BreakpointTestCase_123'],
                 'permanent': False,
-                'break_on_start': True
+                'break_on_install': True
             },
             'workflow_id': 'set_breakpoint_state',
             'status_display': 'cancelled',
@@ -338,7 +338,7 @@ class BreakpointStateExecutionsTest(TestCase):
                 'node_ids': None,
                 'node_instance_ids': ['BreakpointTestCase_123'],
                 'permanent': False,
-                'break_on_start': True
+                'break_on_install': True
             },
             'workflow_id': 'another_workflow',
             'status_display': 'completed',

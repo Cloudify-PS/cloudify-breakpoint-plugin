@@ -17,5 +17,5 @@ node_templates:
       properties:
         authorization: *authorization
         resource_config:
-          default_break_on_start: true
-          default_break_on_stop: true
+          default_break_on_install: true
+          default_break_on_uninstall: true

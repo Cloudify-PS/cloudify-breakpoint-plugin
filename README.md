@@ -15,12 +15,12 @@ Properties:
 - authorization
     - **users** - list of usernames that can change breakpoint state
 - resource_config
-    - **default_break_on_start** - initial flag applied in `cloudify.interfaces.lifecycle.start`, used when there was not any execution of _set_breakpoint_state_ workflow that is related to this node (neither the latest execution nor with permanent flag)
-    - **default_break_on_stop** - initial flag applied in `cloudify.interfaces.lifecycle.stop`, analogous to _default_break_on_start_
+    - **default_break_on_install** - initial flag applied in `cloudify.interfaces.lifecycle.start`, used when there was not any execution of _set_breakpoint_state_ workflow that is related to this node (neither the latest execution nor with permanent flag)
+    - **default_break_on_uninstall** - initial flag applied in `cloudify.interfaces.lifecycle.stop`, analogous to _default_break_on_install_
 
 Operations:
-- `cloudify.interfaces.lifecycle.start`- when _break_on_start_ (or initially _default_break_on_start_) is enabled it raises `NonRecoverableError`; this operation is executed on install (see [Cloudify Built-in Workflows](https://docs.cloudify.co/latest/working_with/workflows/built-in-workflows/))
-- `cloudify.interfaces.lifecycle.stop` - when _break_on_stop_ (or initially _default_break_on_stop_) is enabled it raises `OperationRetry`; this operation is executed on uninstall (see [Cloudify Built-in Workflows](https://docs.cloudify.co/latest/working_with/workflows/built-in-workflows/))
+- `cloudify.interfaces.lifecycle.start`- when _break_on_install_ (or initially _default_break_on_install_) is enabled it raises `NonRecoverableError`; this operation is executed on install (see [Cloudify Built-in Workflows](https://docs.cloudify.co/latest/working_with/workflows/built-in-workflows/))
+- `cloudify.interfaces.lifecycle.stop` - when _break_on_uninstall_ (or initially _default_break_on_uninstall_) is enabled it raises `OperationRetry`; this operation is executed on uninstall (see [Cloudify Built-in Workflows](https://docs.cloudify.co/latest/working_with/workflows/built-in-workflows/))
 - `cloudify.interfaces.breakpoint.check` - If the user executing the operation is not in the nodes property authorization.users raise `NonRecoverableError`
 
 ### Workflow:
@@ -33,8 +33,8 @@ Parameters:
 
 - **node_ids** - list of IDs of `cloudify.nodes.breakpoint.Breakpoint`
 - **node_instance_ids** - list of IDs of `cloudify.nodes.breakpoint.Breakpoint` node instance, node ID is used interchangeably
-- **break_on_start**  (default: true) - specifies if the breakpoint should stop on `cloudify.interfaces.lifecycle.start` lifecycle operation
-- **break_on_stop** (default: true) - specifies if the breakpoint should stop on `cloudify.interfaces.lifecycle.stop` lifecycle operation
+- **break_on_install**  (default: true) - specifies if the breakpoint should stop on `cloudify.interfaces.lifecycle.start` lifecycle operation
+- **break_on_uninstall** (default: true) - specifies if the breakpoint should stop on `cloudify.interfaces.lifecycle.stop` lifecycle operation
 - **permanent** (default: false) - specifies that this setting of the breakpoints is permanent, if false it will apply only to the next execution
 
 

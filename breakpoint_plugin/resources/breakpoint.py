@@ -20,16 +20,16 @@ BREAK_MSG = 'Breakpoint active. An allowed user must deactivate ' \
 @operation
 def start(ctx, **kwargs):
     """
-    When break_on_start (or initially default_break_on_start) is enabled
+    When break_on_install (or initially default_break_on_install) is enabled
     it raises NonRecoverableError.
     :param ctx: Cloudify context
     :param kwargs: The parameters given from the user
     """
     break_error = NonRecoverableError(BREAK_MSG)
 
-    default_break_on_start = \
+    default_break_on_install = \
         get_desired_value(
-            'default_break_on_start',
+            'default_break_on_install',
             args=kwargs,
             instance_attr={},
             node_prop=ctx.node.properties.get('resource_config'))
@@ -42,12 +42,12 @@ def start(ctx, **kwargs):
         logger=ctx.logger)
     active_breakpoint = breakpoint_executions.get_valid_execution()
     if not active_breakpoint:
-        ctx.logger.debug('Applying default_break_on_start ({}).'
-                         .format(default_break_on_start))
-        if default_break_on_start:
+        ctx.logger.debug('Applying default_break_on_install ({}).'
+                         .format(default_break_on_install))
+        if default_break_on_install:
             raise break_error
     if active_breakpoint \
-            and active_breakpoint.get('parameters').get('break_on_start'):
+            and active_breakpoint.get('parameters').get('break_on_install'):
         raise break_error
 
     # No error raised so continue execution without any interruption
@@ -57,16 +57,16 @@ def start(ctx, **kwargs):
 @operation
 def stop(ctx, **kwargs):
     """
-    When break_on_stop (or initially default_break_on_stop) is enabled
-    it raises OperationRetry.
+    When break_on_uninstall (or initially default_break_on_uninstall)
+    is enabled it raises OperationRetry.
     :param ctx: Cloudify context
     :param kwargs: The parameters given from the user
     """
     break_error = OperationRetry(BREAK_MSG)
 
-    default_break_on_stop = \
+    default_break_on_uninstall = \
         get_desired_value(
-            'default_break_on_stop',
+            'default_break_on_uninstall',
             args=kwargs,
             instance_attr={},
             node_prop=ctx.node.properties.get('resource_config'))
@@ -79,12 +79,12 @@ def stop(ctx, **kwargs):
         logger=ctx.logger)
     active_breakpoint = breakpoint_executions.get_valid_execution()
     if not active_breakpoint:
-        ctx.logger.debug('Applying default_break_on_stop ({}).'
-                         .format(default_break_on_stop))
-        if default_break_on_stop:
+        ctx.logger.debug('Applying default_break_on_uninstall ({}).'
+                         .format(default_break_on_uninstall))
+        if default_break_on_uninstall:
             raise break_error
     if active_breakpoint and \
-            active_breakpoint.get('parameters').get('break_on_stop'):
+            active_breakpoint.get('parameters').get('break_on_uninstall'):
         raise break_error
 
     # No error raised so continue execution without any interruption

@@ -20,10 +20,10 @@ data_types:
 
   cloudify.types.breakpoint.resourceconfig.Breakpoint:
     properties:
-      default_break_on_start:
+      default_break_on_install:
         type: boolean
         default: true
-      default_break_on_stop:
+      default_break_on_uninstall:
         type: boolean
         default: true
 
@@ -54,11 +54,11 @@ workflows:
       node_instance_ids:
         description: The list of node instance IDs to open breakpoint for.
         type: list
-      break_on_start:
+      break_on_install:
         description: Specifies if the breakpoint should stop on start lifecycle operation.
         type: boolean
         default: true
-      break_on_stop:
+      break_on_uninstall:
         description: Specifies if the breakpoint should stop on stop lifecycle operation.
         type: boolean
         default: true

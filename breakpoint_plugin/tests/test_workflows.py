@@ -26,7 +26,7 @@ class BreakpointWorkflowTest(BreakpointTestBase):
             test_name='BreakpointTestCase',
             test_properties={
                 'resource_config': {
-                    'default_break_on_start': True
+                    'default_break_on_install': True
                 },
                 'authorization': {
                     'users': [
@@ -49,7 +49,7 @@ class BreakpointWorkflowTest(BreakpointTestBase):
             test_name='BreakpointTestCase',
             test_properties={
                 'resource_config': {
-                    'default_break_on_start': True
+                    'default_break_on_install': True
                 },
                 'authorization': {
                     'users': [
@@ -75,7 +75,7 @@ class BreakpointWorkflowTest(BreakpointTestBase):
             test_name='BreakpointTestCase',
             test_properties={
                 'resource_config': {
-                    'default_break_on_start': True
+                    'default_break_on_install': True
                 },
                 'authorization': {
                     'users': [
