@@ -49,6 +49,10 @@ def set_breakpoint_state(node_ids=None,
     execution_creator_username = ctx.execution_creator_username
     _node_ids = node_ids or []
     _node_instance_ids = node_instance_ids or []
+    if not isinstance(_node_ids, list) \
+       or not isinstance(_node_instance_ids, list):
+        raise NonRecoverableError(
+            'node_ids/node_instance_ids parameter should be a list!')
     for node_id in _node_ids:
         node = ctx.get_node(node_id)
         users = node.properties.get('authorization').get('users')

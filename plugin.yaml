@@ -2,7 +2,7 @@ plugins:
   breakpoint:
     executor: central_deployment_agent
     package_name: cloudify-breakpoint-plugin
-    package_version: '1.1.0'
+    package_version: '1.1.1'
 
 dsl_definitions:
   authorization: &authorization
@@ -51,9 +51,11 @@ workflows:
       node_ids:
         description: The list of node IDs to open breakpoint for.
         type: list
+        default: []
       node_instance_ids:
         description: The list of node instance IDs to open breakpoint for.
         type: list
+        default: []
       break_on_install:
         description: Specifies if the breakpoint should stop on start lifecycle operation.
         type: boolean

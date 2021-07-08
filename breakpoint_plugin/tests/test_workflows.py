@@ -91,3 +91,15 @@ class BreakpointWorkflowTest(BreakpointTestBase):
         with self.assertRaises(NonRecoverableError):
             set_breakpoint_state(node_ids=['BreakpointTestCase'],
                                  ctx=self._ctx)
+
+    def test_invalid_node_ids(self):
+        expected_msg = 'node_ids/node_instance_ids parameter should be a list!'
+        self._prepare_context_for_operation(
+            test_name='BreakpointTestCase',
+            ctx_operation_name='set_breakpoint_state')
+        self._ctx.get_node = MagicMock(return_value=self._ctx.node)
+
+        with self.assertRaises(NonRecoverableError) as err:
+            set_breakpoint_state(node_instance_ids="[]",
+                                 ctx=self._ctx)
+            self.assertEqual(str(err), expected_msg)
