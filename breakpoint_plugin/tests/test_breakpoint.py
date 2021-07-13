@@ -31,15 +31,10 @@ class BreakpointNodeTest(BreakpointTestBase):
     def test_start_permanent(self, get_rest_client):
         get_rest_client.return_value = self.get_mock_rest_client(executions=[
             {
-                'id': 'ab7452fc-bdac-41f1-952b-5e1789346acf',
-                'created_at': '2021-06-16T14:45:55.592Z',
-                'parameters': {
-                    'node_ids': None,
-                    'node_instance_ids': ['BreakpointTestCase'],
-                    'permanent': True,
-                    'break_on_install': False
-                },
-                'workflow_id': 'set_breakpoint_state',
+                'id': 'a9b18e4d-f181-4fe0-89d5-a450330c2fff',
+                'created_at': '2021-06-17T10:23:26.975Z',
+                'workflow_id': 'another_workflow',
+                'deployment_id': 'BreakpointTestCase',
                 'status_display': 'completed',
                 'created_by': 'admin'
             },
@@ -57,10 +52,15 @@ class BreakpointNodeTest(BreakpointTestBase):
                 'created_by': 'admin'
             },
             {
-                'id': 'a9b18e4d-f181-4fe0-89d5-a450330c2fff',
-                'created_at': '2021-06-17T10:23:26.975Z',
-                'workflow_id': 'another_workflow',
-                'deployment_id': 'BreakpointTestCase',
+                'id': 'ab7452fc-bdac-41f1-952b-5e1789346acf',
+                'created_at': '2021-06-16T14:45:55.592Z',
+                'parameters': {
+                    'node_ids': None,
+                    'node_instance_ids': ['BreakpointTestCase'],
+                    'permanent': True,
+                    'break_on_install': False
+                },
+                'workflow_id': 'set_breakpoint_state',
                 'status_display': 'completed',
                 'created_by': 'admin'
             }
@@ -370,19 +370,6 @@ class BreakpointNodeTest(BreakpointTestBase):
     def test_start_latest_prioritized(self, get_rest_client):
         get_rest_client.return_value = self.get_mock_rest_client(executions=[
             {
-                'id': 'ab7452fc-bdac-41f1-952b-5e1789346acf',
-                'created_at': '2021-06-16T14:45:55.592Z',
-                'parameters': {
-                    'node_ids': None,
-                    'node_instance_ids': ['BreakpointTestCase'],
-                    'permanent': True,
-                    'break_on_install': False
-                },
-                'workflow_id': 'set_breakpoint_state',
-                'status_display': 'completed',
-                'created_by': 'admin'
-            },
-            {
                 'id': 'ab7452fc-bdac-41f1-952b-5e1789346ad0',
                 'created_at': '2021-06-17T10:23:26.975Z',
                 'parameters': {
@@ -390,6 +377,19 @@ class BreakpointNodeTest(BreakpointTestBase):
                     'node_instance_ids': ['BreakpointTestCase'],
                     'permanent': False,
                     'break_on_install': True
+                },
+                'workflow_id': 'set_breakpoint_state',
+                'status_display': 'completed',
+                'created_by': 'admin'
+            },
+            {
+                'id': 'ab7452fc-bdac-41f1-952b-5e1789346acf',
+                'created_at': '2021-06-16T14:45:55.592Z',
+                'parameters': {
+                    'node_ids': None,
+                    'node_instance_ids': ['BreakpointTestCase'],
+                    'permanent': True,
+                    'break_on_install': False
                 },
                 'workflow_id': 'set_breakpoint_state',
                 'status_display': 'completed',

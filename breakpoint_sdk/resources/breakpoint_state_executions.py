@@ -1,10 +1,9 @@
 from cloudify.manager import get_rest_client
 
-from datetime import datetime
 from itertools import dropwhile
 
 
-EXECUTION_TIMESTAMP_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
+PAGINATION_SIZE = 50
 
 
 class BreakpointStateExecutions:
@@ -69,13 +68,21 @@ class BreakpointStateExecutions:
         return valid_execution
 
     def get_valid_execution(self):
+        offset = 0
         client = get_rest_client()
-        executions = client.executions.list()
-        executions.sort(
-            reverse=True,
-            key=lambda x: datetime.strptime(x.get('created_at'),
-                                            EXECUTION_TIMESTAMP_FORMAT))
-        latest_execution = self.get_latest_execution(executions)
-        if latest_execution:
-            return latest_execution
-        return self.get_permanent_execution(executions)
+        while True:
+            executions = client.executions.list(
+                sort='started_at',
+                is_descending=True,
+                _size=PAGINATION_SIZE,
+                _offset=offset)
+            if len(executions) == 0:
+                return None
+            latest_execution = self.get_latest_execution(executions)
+            if latest_execution:
+                return latest_execution
+            permanent_execution = self.get_permanent_execution(executions)
+            if permanent_execution:
+                return permanent_execution
+
+            offset += PAGINATION_SIZE
