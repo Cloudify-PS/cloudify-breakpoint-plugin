@@ -1,4 +1,5 @@
 # Third party imports
+from cloudify import context
 from cloudify.decorators import operation
 from cloudify.exceptions import NonRecoverableError, OperationRetry
 
@@ -26,16 +27,24 @@ def start(ctx, **kwargs):
     :param kwargs: The parameters given from the user
     """
     break_error = OperationRetry(BREAK_MSG)
+    node = None
+    instance = None
+    if ctx.type == context.RELATIONSHIP_INSTANCE:
+        node = ctx.target.node
+        instance = ctx.target.instance
+    else:
+        node = ctx.node
+        instance = ctx.instance
 
     default_break_on_install = \
         get_desired_value(
             'default_break_on_install',
             args=kwargs,
             instance_attr={},
-            node_prop=ctx.node.properties.get('resource_config'))
+            node_prop=node.properties.get('resource_config'))
     breakpoint_executions = BreakpointStateExecutions(
-        node_id=ctx.node.id,
-        instance_id=ctx.instance.id,
+        node_id=node.id,
+        instance_id=instance.id,
         workflow_id=ctx.workflow_id,
         deployment_id=ctx.deployment.id,
         breakpoint_state_workflow_name=set_breakpoint_state.__name__,
@@ -63,16 +72,24 @@ def delete(ctx, **kwargs):
     :param kwargs: The parameters given from the user
     """
     break_error = OperationRetry(BREAK_MSG)
+    node = None
+    instance = None
+    if ctx.type == context.RELATIONSHIP_INSTANCE:
+        node = ctx.target.node
+        instance = ctx.target.instance
+    else:
+        node = ctx.node
+        instance = ctx.instance
 
     default_break_on_uninstall = \
         get_desired_value(
             'default_break_on_uninstall',
             args=kwargs,
             instance_attr={},
-            node_prop=ctx.node.properties.get('resource_config'))
+            node_prop=node.properties.get('resource_config'))
     breakpoint_executions = BreakpointStateExecutions(
-        node_id=ctx.node.id,
-        instance_id=ctx.instance.id,
+        node_id=node.id,
+        instance_id=instance.id,
         workflow_id=ctx.workflow_id,
         deployment_id=ctx.deployment.id,
         breakpoint_state_workflow_name=set_breakpoint_state.__name__,
