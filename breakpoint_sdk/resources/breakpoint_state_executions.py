@@ -75,7 +75,8 @@ class BreakpointStateExecutions:
                 sort='started_at',
                 is_descending=True,
                 _size=PAGINATION_SIZE,
-                _offset=offset)
+                _offset=offset,
+                deployment_id=self.deployment_id)
             if len(executions) == 0:
                 return None
             latest_execution = self.get_latest_execution(executions)
