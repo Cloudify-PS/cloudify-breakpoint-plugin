@@ -18,12 +18,21 @@ class BreakpointNodeTest(BreakpointTestBase):
 
     def get_mock_rest_client(self,
                              executions=None,
-                             execution_creator_role=None):
+                             execution_creator_role=None,
+                             execution_creator_tenant_roles=None):
         mock_rest_client = MagicMock()
+        if execution_creator_tenant_roles is None:
+            execution_creator_tenant_roles = ['user']
         mock_rest_client.executions.list = MagicMock(
             return_value=executions or [])
         mock_rest_client.users.get = MagicMock(
-            return_value={'role': execution_creator_role})
+            return_value={
+                'role': execution_creator_role,
+                'tenants': {
+                    'default_tenant': {
+                        'roles': execution_creator_tenant_roles
+                    }
+                }})
         return mock_rest_client
 
     @patch('breakpoint_sdk.resources.breakpoint_state_executions'
@@ -433,7 +442,7 @@ class BreakpointNodeTest(BreakpointTestBase):
 
         get_rest_client().users.get.assert_called_with('admin')
 
-    def test_check_executed_by_authorized(self):
+    def test_check_executed_by_authorized_user(self):
         self._prepare_context_for_operation(
             test_name='BreakpointTestCase',
             test_properties={
@@ -456,7 +465,31 @@ class BreakpointNodeTest(BreakpointTestBase):
         # no error raised
 
     @patch('breakpoint_plugin.utils.get_rest_client')
-    def test_check_executed_by_unauthorized(self, get_rest_client):
+    def test_check_executed_by_authorized_role(self, get_rest_client):
+        get_rest_client.return_value = self.get_mock_rest_client(
+            execution_creator_role="default",
+            execution_creator_tenant_roles=['user'])
+        self._prepare_context_for_operation(
+            test_name='BreakpointTestCase',
+            test_properties={
+                'resource_config': {
+                    'default_break_on_install': False
+                },
+                'authorization': {
+                    'users': [],
+                    'roles': ['user']
+                }
+            },
+            ctx_operation_name='cloudify.interfaces.breakpoint.check',
+            ctx_execution_creator_username='Bob')
+
+        check(current_ctx.ctx)
+
+        # assert
+        # no error raised
+
+    @patch('breakpoint_plugin.utils.get_rest_client')
+    def test_check_executed_by_unauthorized_user(self, get_rest_client):
         get_rest_client.return_value = self.get_mock_rest_client(
             execution_creator_role='default')
         self._prepare_context_for_operation(
@@ -467,6 +500,28 @@ class BreakpointNodeTest(BreakpointTestBase):
                 },
                 'authorization': {
                     'users': ['Alice']
+                }
+            },
+            ctx_operation_name='cloudify.interfaces.breakpoint.check',
+            ctx_execution_creator_username='Eve')
+
+        with self.assertRaises(NonRecoverableError):
+            check(current_ctx.ctx)
+
+    @patch('breakpoint_plugin.utils.get_rest_client')
+    def test_check_executed_by_unauthorized_role(self, get_rest_client):
+        get_rest_client.return_value = self.get_mock_rest_client(
+            execution_creator_role='default',
+            execution_creator_tenant_roles=['user'])
+        self._prepare_context_for_operation(
+            test_name='BreakpointTestCase',
+            test_properties={
+                'resource_config': {
+                    'default_break_on_install': False
+                },
+                'authorization': {
+                    'users': ['Alice'],
+                    'roles': ['manager']
                 }
             },
             ctx_operation_name='cloudify.interfaces.breakpoint.check',

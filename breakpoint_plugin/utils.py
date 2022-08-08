@@ -25,3 +25,20 @@ def has_admin_role(username):
         if role == 'sys_admin':
             return True
         return False
+
+
+def has_authorized_role(username, tenant, authorized_roles):
+    """
+    Gets a tenant role for the username and checks if it is authorized
+    :param username: string
+    :return: True if user has authorized tenant role, otherwise False
+    """
+    client = get_rest_client()
+    user_roles = None
+    try:
+        user_roles = client.users.get(username, _get_data=True).get(
+            'tenants').get(tenant).get('roles')
+    finally:
+        if set(user_roles).intersection(authorized_roles):
+            return True
+        return False

@@ -25,6 +25,10 @@ class CustomMockCloudifyContext(MockCloudifyContext):
     def execution_creator_username(self):
         return self._execution_creator_username
 
+    @property
+    def tenant_name(self):
+        return 'default_tenant'
+
 
 class CustomMockNodeContext(MockNodeContext):
     def __init__(self,

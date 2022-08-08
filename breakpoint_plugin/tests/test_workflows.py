@@ -9,13 +9,23 @@ from cloudify.exceptions import NonRecoverableError
 
 
 class BreakpointWorkflowTest(BreakpointTestBase):
-    def get_mock_rest_client(self, execution_creator_role=None):
+    def get_mock_rest_client(self,
+                             execution_creator_role=None,
+                             execution_creator_tenant_roles=None):
         mock_rest_client = MagicMock()
         node_instance = namedtuple('MockNodeInstance', 'node_id')
+        if execution_creator_tenant_roles is None:
+            execution_creator_tenant_roles = ['user']
         mock_rest_client.node_instances.get = MagicMock(
             return_value=node_instance('BreakpointTestCase'))
         mock_rest_client.users.get = MagicMock(
-            return_value={'role': execution_creator_role})
+            return_value={
+                'role': execution_creator_role,
+                'tenants': {
+                    'default_tenant': {
+                        'roles': execution_creator_tenant_roles
+                    }
+                }})
         return mock_rest_client
 
     @patch('breakpoint_plugin.utils.get_rest_client')
@@ -82,6 +92,55 @@ class BreakpointWorkflowTest(BreakpointTestBase):
                         'Alice',
                         'Bob'
                     ]
+                }
+            },
+            ctx_operation_name='set_breakpoint_state',
+            ctx_execution_creator_username='Eve')
+        self._ctx.get_node = MagicMock(return_value=self._ctx.node)
+
+        with self.assertRaises(NonRecoverableError):
+            set_breakpoint_state(node_ids=['BreakpointTestCase'],
+                                 ctx=self._ctx)
+
+    @patch('breakpoint_plugin.utils.get_rest_client')
+    def test_authorized_role(self, get_rest_client):
+        get_rest_client.return_value = self.get_mock_rest_client(
+            execution_creator_role='default',
+            execution_creator_tenant_roles=['manager'])
+        self._prepare_context_for_operation(
+            test_name='BreakpointTestCase',
+            test_properties={
+                'resource_config': {
+                    'default_break_on_install': True
+                },
+                'authorization': {
+                    'users': [],
+                    'roles': ['manager']
+                }
+            },
+            ctx_operation_name='set_breakpoint_state',
+            ctx_execution_creator_username='Eve')
+        self._ctx.get_node = MagicMock(return_value=self._ctx.node)
+
+        result = set_breakpoint_state(node_ids=['BreakpointTestCase'],
+                                      ctx=self._ctx)
+
+        self.assertTrue(result)
+
+    @patch('breakpoint_plugin.utils.get_rest_client')
+    def test_unauthorized_role(self, get_rest_client):
+        get_rest_client.return_value = self.get_mock_rest_client(
+            execution_creator_role='default',
+            execution_creator_tenant_roles=['user'])
+        self._prepare_context_for_operation(
+            test_name='BreakpointTestCase',
+            test_properties={
+                'resource_config': {
+                    'default_break_on_install': True
+                },
+                'authorization': {
+                    'users': [],
+                    'roles': ['manager']
                 }
             },
             ctx_operation_name='set_breakpoint_state',

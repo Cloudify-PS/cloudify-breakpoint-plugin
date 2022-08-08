@@ -14,6 +14,7 @@ The node acting as a breakpoint.
 Properties:
 - authorization
     - **users** - list of usernames that can change breakpoint state
+    - **roles** - (optional) list of roles that can change breakpoint state
 - resource_config
     - **default_break_on_install** - initial flag applied in `cloudify.interfaces.lifecycle.start`, used when there was not any execution of _set_breakpoint_state_ workflow that is related to this node (neither the latest execution nor with permanent flag)
     - **default_break_on_uninstall** - initial flag applied in `cloudify.interfaces.lifecycle.delete`, analogous to _default_break_on_install_

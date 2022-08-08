@@ -6,7 +6,8 @@ from cloudify.exceptions import NonRecoverableError, OperationRetry
 # Local imports
 from . import get_desired_value
 from breakpoint_plugin.utils import (
-    has_admin_role
+    has_admin_role,
+    has_authorized_role
 )
 from breakpoint_sdk.resources.breakpoint_state_executions import (
     BreakpointStateExecutions
@@ -112,13 +113,18 @@ def delete(ctx, **kwargs):
 def check(ctx, **kwargs):
     """
     If the user executing the operation is not in the nodes property
-    authorization.users it raises NonRecoverableError.
+    authorization.users or his role is not in the nodes property
+    authorization.roles it raises NonRecoverableError.
     :param ctx: Cloudify context
     :param kwargs: The parameters given from the user
     """
     execution_creator_username = ctx.execution_creator_username
     if execution_creator_username in \
-            ctx.node.properties.get('authorization').get('users'):
+            ctx.node.properties.get('authorization').get('users') or \
+            has_authorized_role(
+                execution_creator_username,
+                ctx.tenant_name,
+                ctx.node.properties.get('authorization').get('roles', [])):
         ctx.logger.info('{} is authorized.'
                         .format(execution_creator_username))
         return
