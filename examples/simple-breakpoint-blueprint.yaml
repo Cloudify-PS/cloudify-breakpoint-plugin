@@ -9,6 +9,8 @@ dsl_definitions:
     users:
       - Alice
       - Bob
+    roles:
+      - manager
 
 node_templates:
 
