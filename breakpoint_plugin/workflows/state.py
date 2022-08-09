@@ -57,12 +57,12 @@ def set_breakpoint_state(node_ids=None,
     tenant = ctx.tenant_name
     _node_ids = node_ids or \
         [node.id for node in filter(lambda node: BREAKPOINT_TYPE in
-            node.type_hierarchy,
-            ctx.nodes)]
+                                    node.type_hierarchy,
+                                    ctx.nodes)]
     _node_instance_ids = node_instance_ids or \
         [instance.id for instance in filter(lambda instance: BREAKPOINT_TYPE in
-            instance.node.type_hierarchy,
-            ctx.node_instances)]
+                                            instance.node.type_hierarchy,
+                                            ctx.node_instances)]
     if not isinstance(_node_ids, list) \
        or not isinstance(_node_instance_ids, list):
         raise NonRecoverableError(
