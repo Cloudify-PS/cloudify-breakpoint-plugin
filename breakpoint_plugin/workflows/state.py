@@ -9,6 +9,8 @@ from breakpoint_plugin.utils import (
     has_authorized_role
 )
 
+from breakpoint_plugin.constants import BREAKPOINT_TYPE
+
 
 def execution_creator_auth(users, roles, tenant, execution_creator_username):
     """
@@ -21,8 +23,8 @@ def execution_creator_auth(users, roles, tenant, execution_creator_username):
     :param execution_creator_username: user which executes the workflow
     """
     if execution_creator_username not in users and \
-            not has_admin_role(execution_creator_username) and \
-            not has_authorized_role(execution_creator_username, tenant, roles):
+            not has_admin_role() and \
+            not has_authorized_role(tenant, roles):
         raise NonRecoverableError(
             "User '{}' is not allowed to executed this workflow."
             .format(execution_creator_username))
@@ -53,8 +55,14 @@ def set_breakpoint_state(node_ids=None,
     """
     execution_creator_username = ctx.execution_creator_username
     tenant = ctx.tenant_name
-    _node_ids = node_ids or []
-    _node_instance_ids = node_instance_ids or []
+    _node_ids = node_ids or \
+        [node.id for node in filter(lambda node: BREAKPOINT_TYPE in
+            node.type_hierarchy,
+            ctx.nodes)]
+    _node_instance_ids = node_instance_ids or \
+        [instance.id for instance in filter(lambda instance: BREAKPOINT_TYPE in
+            instance.node.type_hierarchy,
+            ctx.node_instances)]
     if not isinstance(_node_ids, list) \
        or not isinstance(_node_instance_ids, list):
         raise NonRecoverableError(

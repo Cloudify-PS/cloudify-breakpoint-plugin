@@ -8,6 +8,7 @@ from cloudify.state import current_ctx
 from cloudify.mocks import (
     MockCloudifyContext,
     MockNodeContext,
+    MockNodeInstanceContext
 )
 
 
@@ -40,6 +41,7 @@ class CustomMockNodeContext(MockNodeContext):
                                                     properties=properties)
         self._type = type
         self._type_hierarchy = type_hierarchy
+        self._instances = MockNodeInstanceContext()
 
     @property
     def type(self):
@@ -48,6 +50,10 @@ class CustomMockNodeContext(MockNodeContext):
     @property
     def type_hierarchy(self):
         return self._type_hierarchy
+
+    @property
+    def instances(self):
+        return self._instances
 
 
 class BreakpointTestBase(unittest.TestCase):
@@ -123,6 +129,7 @@ class BreakpointTestBase(unittest.TestCase):
                                        test_runtime_properties={},
                                        test_relationships=None,
                                        type_hierarchy=['cloudify.nodes.Root'],
+                                       node_type='cloudify.nodes.Root',
                                        test_source=None,
                                        test_target=None,
                                        ctx_operation_name=None,
@@ -133,6 +140,7 @@ class BreakpointTestBase(unittest.TestCase):
             test_runtime_properties=test_runtime_properties,
             test_relationships=test_relationships,
             type_hierarchy=type_hierarchy,
+            node_type=node_type,
             test_source=test_source,
             test_target=test_target,
             ctx_operation_name=ctx_operation_name,

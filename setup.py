@@ -4,7 +4,7 @@ from setuptools import find_packages
 
 setup(
     name='cloudify-breakpoint-plugin',
-    version='1.1.4',
+    version='1.1.5',
     author='Michal Mordawski',
     author_email='Michal.Mordawski@cloudify.co',
     license='LICENSE',

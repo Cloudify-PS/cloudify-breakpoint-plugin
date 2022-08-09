@@ -5,6 +5,8 @@ from collections import namedtuple
 # Local imports
 from breakpoint_plugin.tests.base import BreakpointTestBase
 from breakpoint_plugin.workflows.state import set_breakpoint_state
+from breakpoint_plugin.constants import BREAKPOINT_TYPE
+
 from cloudify.exceptions import NonRecoverableError
 
 
@@ -45,9 +47,14 @@ class BreakpointWorkflowTest(BreakpointTestBase):
                     ]
                 }
             },
+            type_hierarchy=['cloudify.nodes.Root', BREAKPOINT_TYPE],
+            node_type=BREAKPOINT_TYPE,
             ctx_operation_name='set_breakpoint_state',
             ctx_execution_creator_username='admin')
         self._ctx.get_node = MagicMock(return_value=self._ctx.node)
+        self._ctx.nodes = MagicMock(return_value=[self._ctx.node])
+        self._ctx.node_instances = MagicMock(
+            return_value=[self._ctx.node.instances])
 
         result = set_breakpoint_state(node_instance_ids=['BreakpointTestCase'],
                                       ctx=self._ctx)
@@ -68,9 +75,14 @@ class BreakpointWorkflowTest(BreakpointTestBase):
                     ]
                 }
             },
+            type_hierarchy=['cloudify.nodes.Root', BREAKPOINT_TYPE],
+            node_type=BREAKPOINT_TYPE,
             ctx_operation_name='set_breakpoint_state',
             ctx_execution_creator_username='Alice')
         self._ctx.get_node = MagicMock(return_value=self._ctx.node)
+        self._ctx.nodes = MagicMock(return_value=[self._ctx.node])
+        self._ctx.node_instances = MagicMock(
+            return_value=[self._ctx.node.instances])
 
         result = set_breakpoint_state(node_ids=['BreakpointTestCase'],
                                       ctx=self._ctx)
@@ -94,9 +106,14 @@ class BreakpointWorkflowTest(BreakpointTestBase):
                     ]
                 }
             },
+            type_hierarchy=['cloudify.nodes.Root', BREAKPOINT_TYPE],
+            node_type=BREAKPOINT_TYPE,
             ctx_operation_name='set_breakpoint_state',
             ctx_execution_creator_username='Eve')
         self._ctx.get_node = MagicMock(return_value=self._ctx.node)
+        self._ctx.nodes = MagicMock(return_value=[self._ctx.node])
+        self._ctx.node_instances = MagicMock(
+            return_value=[self._ctx.node.instances])
 
         with self.assertRaises(NonRecoverableError):
             set_breakpoint_state(node_ids=['BreakpointTestCase'],
@@ -118,9 +135,14 @@ class BreakpointWorkflowTest(BreakpointTestBase):
                     'roles': ['manager']
                 }
             },
+            type_hierarchy=['cloudify.nodes.Root', BREAKPOINT_TYPE],
+            node_type=BREAKPOINT_TYPE,
             ctx_operation_name='set_breakpoint_state',
             ctx_execution_creator_username='Eve')
         self._ctx.get_node = MagicMock(return_value=self._ctx.node)
+        self._ctx.nodes = MagicMock(return_value=[self._ctx.node])
+        self._ctx.node_instances = MagicMock(
+            return_value=[self._ctx.node.instances])
 
         result = set_breakpoint_state(node_ids=['BreakpointTestCase'],
                                       ctx=self._ctx)
@@ -143,9 +165,14 @@ class BreakpointWorkflowTest(BreakpointTestBase):
                     'roles': ['manager']
                 }
             },
+            type_hierarchy=['cloudify.nodes.Root', BREAKPOINT_TYPE],
+            node_type=BREAKPOINT_TYPE,
             ctx_operation_name='set_breakpoint_state',
             ctx_execution_creator_username='Eve')
         self._ctx.get_node = MagicMock(return_value=self._ctx.node)
+        self._ctx.nodes = MagicMock(return_value=[self._ctx.node])
+        self._ctx.node_instances = MagicMock(
+            return_value=[self._ctx.node.instances])
 
         with self.assertRaises(NonRecoverableError):
             set_breakpoint_state(node_ids=['BreakpointTestCase'],
@@ -157,6 +184,7 @@ class BreakpointWorkflowTest(BreakpointTestBase):
             test_name='BreakpointTestCase',
             ctx_operation_name='set_breakpoint_state')
         self._ctx.get_node = MagicMock(return_value=self._ctx.node)
+        self._ctx.nodes = MagicMock(return_value=[self._ctx.node])
 
         with self.assertRaises(NonRecoverableError) as err:
             set_breakpoint_state(node_instance_ids="[]",

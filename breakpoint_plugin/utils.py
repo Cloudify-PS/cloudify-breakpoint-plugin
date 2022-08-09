@@ -11,7 +11,7 @@ def get_node_instance(node_instance_id):
     return rest_client.node_instances.get(node_instance_id=node_instance_id)
 
 
-def has_admin_role(username):
+def has_admin_role():
     """
     Gets a role for the username and checks if it has sys_admin role
     :param username: string
@@ -20,14 +20,14 @@ def has_admin_role(username):
     client = get_rest_client()
     role = None
     try:
-        role = client.users.get(username).get('role')
+        role = client.users.get_self().get('role')
     finally:
         if role == 'sys_admin':
             return True
         return False
 
 
-def has_authorized_role(username, tenant, authorized_roles):
+def has_authorized_role(tenant, authorized_roles):
     """
     Gets a tenant role for the username and checks if it is authorized
     :param username: string
@@ -36,7 +36,7 @@ def has_authorized_role(username, tenant, authorized_roles):
     client = get_rest_client()
     user_roles = None
     try:
-        user_roles = client.users.get(username, _get_data=True).get(
+        user_roles = client.users.get_self(_get_data=True).get(
             'tenants').get(tenant).get('roles')
     finally:
         if set(user_roles).intersection(authorized_roles):
