@@ -122,13 +122,12 @@ def check(ctx, **kwargs):
     if execution_creator_username in \
             ctx.node.properties.get('authorization').get('users') or \
             has_authorized_role(
-                execution_creator_username,
                 ctx.tenant_name,
                 ctx.node.properties.get('authorization').get('roles', [])):
         ctx.logger.info('{} is authorized.'
                         .format(execution_creator_username))
         return
-    if has_admin_role(execution_creator_username):
+    if has_admin_role():
         ctx.logger.info('admin is authorized')
         return
     raise NonRecoverableError('{} is not authorized.'

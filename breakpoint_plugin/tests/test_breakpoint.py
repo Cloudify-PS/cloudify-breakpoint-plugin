@@ -25,7 +25,7 @@ class BreakpointNodeTest(BreakpointTestBase):
             execution_creator_tenant_roles = ['user']
         mock_rest_client.executions.list = MagicMock(
             return_value=executions or [])
-        mock_rest_client.users.get = MagicMock(
+        mock_rest_client.users.get_self = MagicMock(
             return_value={
                 'role': execution_creator_role,
                 'tenants': {
@@ -440,7 +440,8 @@ class BreakpointNodeTest(BreakpointTestBase):
 
         check(current_ctx.ctx)
 
-        get_rest_client().users.get.assert_called_with('admin')
+        # assert
+        # no error raised
 
     def test_check_executed_by_authorized_user(self):
         self._prepare_context_for_operation(
