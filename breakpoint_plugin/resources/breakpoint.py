@@ -27,7 +27,7 @@ def start(ctx, **kwargs):
     :param ctx: Cloudify context
     :param kwargs: The parameters given from the user
     """
-    break_error = OperationRetry(BREAK_MSG)
+
     node = None
     instance = None
     if ctx.type == context.RELATIONSHIP_INSTANCE:
@@ -36,6 +36,18 @@ def start(ctx, **kwargs):
     else:
         node = ctx.node
         instance = ctx.instance
+
+    retry_on_break = \
+        get_desired_value(
+            'retry_on_break',
+            args=kwargs,
+            instance_attr={},
+            node_prop=node.properties.get('resource_config'))
+            
+    if retry_on_break:
+        break_error = OperationRetry(BREAK_MSG)
+    else:
+        break_error = NonRecoverableError(BREAK_MSG)
 
     default_break_on_install = \
         get_desired_value(
@@ -48,7 +60,12 @@ def start(ctx, **kwargs):
         instance_id=instance.id,
         workflow_id=ctx.workflow_id,
         deployment_id=ctx.deployment.id,
-        breakpoint_state_workflow_name=set_breakpoint_state.__name__,
+        breakpoint_state_workflow_name=\
+            get_desired_value(
+                'breakpoint_state_workflow_name',
+                args=kwargs,
+                instance_attr={},
+                node_prop=node.properties.get('resource_config')),
         logger=ctx.logger)
     active_breakpoint = breakpoint_executions.get_valid_execution()
     if not active_breakpoint:
@@ -72,7 +89,6 @@ def delete(ctx, **kwargs):
     :param ctx: Cloudify context
     :param kwargs: The parameters given from the user
     """
-    break_error = OperationRetry(BREAK_MSG)
     node = None
     instance = None
     if ctx.type == context.RELATIONSHIP_INSTANCE:
@@ -81,6 +97,18 @@ def delete(ctx, **kwargs):
     else:
         node = ctx.node
         instance = ctx.instance
+        
+    retry_on_break = \
+        get_desired_value(
+            'retry_on_break',
+            args=kwargs,
+            instance_attr={},
+            node_prop=node.properties.get('resource_config'))
+            
+    if retry_on_break:
+        break_error = OperationRetry(BREAK_MSG)
+    else:
+        break_error = NonRecoverableError(BREAK_MSG)
 
     default_break_on_uninstall = \
         get_desired_value(
@@ -93,7 +121,12 @@ def delete(ctx, **kwargs):
         instance_id=instance.id,
         workflow_id=ctx.workflow_id,
         deployment_id=ctx.deployment.id,
-        breakpoint_state_workflow_name=set_breakpoint_state.__name__,
+        breakpoint_state_workflow_name=\
+            get_desired_value(
+                'breakpoint_state_workflow_name',
+                args=kwargs,
+                instance_attr={},
+                node_prop=node.properties.get('resource_config')),
         logger=ctx.logger)
     active_breakpoint = breakpoint_executions.get_valid_execution()
     if not active_breakpoint:
