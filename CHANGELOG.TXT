@@ -1,3 +1,6 @@
+1.1.6:
+ - Add break_error control
+ - Add breakpoint_state_workflow_name control
 1.1.5:
  - Fixed regression bug in set_breakpoint_state.
  - Fixed permissions issue in role-based authorization.

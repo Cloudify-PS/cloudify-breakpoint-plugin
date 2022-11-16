@@ -2,7 +2,7 @@ plugins:
   breakpoint:
     executor: central_deployment_agent
     package_name: cloudify-breakpoint-plugin
-    package_version: '1.1.5'
+    package_version: '1.1.6'
 
 dsl_definitions:
   authorization: &authorization
@@ -27,6 +27,12 @@ data_types:
         type: boolean
         default: true
       default_break_on_uninstall:
+        type: boolean
+        default: true
+      breakpoint_state_workflow_name:
+        type: string
+        default: set_breakpoint_state
+      retry_on_break:
         type: boolean
         default: true
 
