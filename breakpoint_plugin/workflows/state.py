@@ -6,13 +6,15 @@ from cloudify.exceptions import NonRecoverableError
 from breakpoint_plugin.utils import (
     get_node_instance,
     has_admin_role,
-    has_authorized_role
+    has_authorized_role,
+    is_authorized_group_member
 )
 
 from breakpoint_plugin.constants import BREAKPOINT_TYPE
 
 
-def execution_creator_auth(users, roles, tenant, execution_creator_username):
+def execution_creator_auth(users, roles, tenant, user_groups,
+                           execution_creator_username):
     """
     Raises NonRecoverableError when neither execution_creator_username is
     not in users parameter nor he does not have any of authorized roles
@@ -20,11 +22,16 @@ def execution_creator_auth(users, roles, tenant, execution_creator_username):
     :param users: list of allowed usernames
     :param roles: list of allowed tenant roles
     :param tenant: tenant in which deployment exists
+    :param user_groups: list of allowed user groups
     :param execution_creator_username: user which executes the workflow
     """
     if execution_creator_username not in users and \
             not has_admin_role() and \
-            not has_authorized_role(tenant, roles):
+            not has_authorized_role(tenant, roles) and \
+            not is_authorized_group_member(
+                user_name=execution_creator_username,
+                user_groups=user_groups
+            ):
         raise NonRecoverableError(
             "User '{}' is not allowed to executed this workflow."
             .format(execution_creator_username))
@@ -67,17 +74,20 @@ def set_breakpoint_state(node_ids=None,
        or not isinstance(_node_instance_ids, list):
         raise NonRecoverableError(
             'node_ids/node_instance_ids parameter should be a list!')
+
     for node_id in _node_ids:
         node = ctx.get_node(node_id)
         users = node.properties.get('authorization').get('users')
         roles = node.properties.get('authorization').get('roles', [])
+        user_groups = node.properties.get('authorization').get('user_groups')
         execution_creator_auth(
-            users, roles, tenant, execution_creator_username)
+            users, roles, tenant, user_groups, execution_creator_username)
     for node_instance_id in _node_instance_ids:
         node_instance = get_node_instance(node_instance_id)
         node = ctx.get_node(node_instance.node_id)
         users = node.properties.get('authorization').get('users')
         roles = node.properties.get('authorization').get('roles', [])
+        user_groups = node.properties.get('authorization').get('user_groups')
         execution_creator_auth(
-            users, roles, tenant, execution_creator_username)
+            users, roles, tenant, user_groups, execution_creator_username)
     return True

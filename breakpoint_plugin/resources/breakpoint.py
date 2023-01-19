@@ -7,7 +7,8 @@ from cloudify.exceptions import NonRecoverableError, OperationRetry
 from . import get_desired_value
 from breakpoint_plugin.utils import (
     has_admin_role,
-    has_authorized_role
+    has_authorized_role,
+    is_authorized_group_member
 )
 from breakpoint_sdk.resources.breakpoint_state_executions import (
     BreakpointStateExecutions
@@ -156,9 +157,12 @@ def check(ctx, **kwargs):
             ctx.node.properties.get('authorization').get('users') or \
             has_authorized_role(
                 ctx.tenant_name,
-                ctx.node.properties.get('authorization').get('roles', [])):
-        ctx.logger.info('{} is authorized.'
-                        .format(execution_creator_username))
+                ctx.node.properties.get('authorization').get('roles', [])) or \
+            is_authorized_group_member(
+                user_name=execution_creator_username,
+                user_groups=ctx.node.properties.get('authorization').get(
+                    'user_groups')):
+        ctx.logger.info('{} is authorized.'.format(execution_creator_username))
         return
     if has_admin_role():
         ctx.logger.info('admin is authorized')

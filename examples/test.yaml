@@ -1,0 +1,22 @@
+tosca_definitions_version: cloudify_dsl_1_3
+
+imports:
+  - https://cloudify.co/spec/cloudify/5.0.5/types.yaml
+  - plugin:cloudify-breakpoint-plugin= ==1.1.6.dev0
+
+dsl_definitions:
+  authorization: &authorization
+    users: []
+    roles: []
+    user_group:
+      - TG_breakpoint
+
+node_templates:
+
+  example-breakpoint:
+    type: cloudify.nodes.breakpoint.Breakpoint
+    properties:
+      authorization: *authorization
+      resource_config:
+        default_break_on_install: true
+        default_break_on_uninstall: true
