@@ -13,7 +13,6 @@ from breakpoint_plugin.utils import (
 from breakpoint_sdk.resources.breakpoint_state_executions import (
     BreakpointStateExecutions
 )
-from breakpoint_plugin.workflows.state import set_breakpoint_state
 
 BREAK_MSG = 'Breakpoint active. An allowed user must deactivate ' \
                'this breakpoint using the Set Breakpoint State ' \
@@ -44,7 +43,7 @@ def start(ctx, **kwargs):
             args=kwargs,
             instance_attr={},
             node_prop=node.properties.get('resource_config'))
-            
+
     if retry_on_break:
         break_error = OperationRetry(BREAK_MSG)
     else:
@@ -61,8 +60,7 @@ def start(ctx, **kwargs):
         instance_id=instance.id,
         workflow_id=ctx.workflow_id,
         deployment_id=ctx.deployment.id,
-        breakpoint_state_workflow_name=\
-            get_desired_value(
+        breakpoint_state_workflow_name=get_desired_value(
                 'breakpoint_state_workflow_name',
                 args=kwargs,
                 instance_attr={},
@@ -98,14 +96,14 @@ def delete(ctx, **kwargs):
     else:
         node = ctx.node
         instance = ctx.instance
-        
+
     retry_on_break = \
         get_desired_value(
             'retry_on_break',
             args=kwargs,
             instance_attr={},
             node_prop=node.properties.get('resource_config'))
-            
+
     if retry_on_break:
         break_error = OperationRetry(BREAK_MSG)
     else:
@@ -122,8 +120,7 @@ def delete(ctx, **kwargs):
         instance_id=instance.id,
         workflow_id=ctx.workflow_id,
         deployment_id=ctx.deployment.id,
-        breakpoint_state_workflow_name=\
-            get_desired_value(
+        breakpoint_state_workflow_name=get_desired_value(
                 'breakpoint_state_workflow_name',
                 args=kwargs,
                 instance_attr={},
