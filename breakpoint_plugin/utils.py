@@ -39,8 +39,6 @@ def has_authorized_role(tenant, authorized_roles):
         user_roles = client.users.get_self(_get_data=True).get(
             'tenants').get(tenant).get('roles')
     finally:
-        if not user_roles:
-            return False
         if set(user_roles).intersection(authorized_roles):
             return True
         return False

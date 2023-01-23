@@ -31,12 +31,24 @@ class BreakpointWorkflowTest(BreakpointTestBase):
         return mock_rest_client
 
     def get_mock_rest_client_for_group_users(self,
+                                             execution_creator_role=None,
+                                             execution_creator_tenant_roles=None,
                                              group_name=None,
                                              members=None):
         mock_rest_client = MagicMock()
         node_instance = namedtuple('MockNodeInstance', 'node_id')
         mock_rest_client.node_instances.get = MagicMock(
             return_value=node_instance('BreakpointTestCase'))
+        if execution_creator_tenant_roles is None:
+            execution_creator_tenant_roles = ['user']
+        mock_rest_client.users.get_self = MagicMock(
+            return_value={
+                'role': execution_creator_role,
+                'tenants': {
+                    'default_tenant': {
+                        'roles': execution_creator_tenant_roles
+                    }
+                }})
         mock_rest_client.user_groups.get = MagicMock(
             return_value={
                 "ldap_dn": "",
