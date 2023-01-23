@@ -1,5 +1,4 @@
 from cloudify.manager import get_rest_client
-from cloudify.workflows import ctx
 
 
 def get_node_instance(node_instance_id):
@@ -40,6 +39,8 @@ def has_authorized_role(tenant, authorized_roles):
         user_roles = client.users.get_self(_get_data=True).get(
             'tenants').get(tenant).get('roles')
     finally:
+        if not user_roles:
+            return False
         if set(user_roles).intersection(authorized_roles):
             return True
         return False
@@ -55,9 +56,8 @@ def is_authorized_group_member(user_name, user_groups=None):
         return False
     client = get_rest_client()
     for user_group in user_groups:
-        members = client.user_groups.get(user_group, _get_data=True).users
-        ctx.logger.info(f'Members of {user_group} group: {members}')
+        members = client.user_groups.get(user_group, _get_data=True).\
+            get('users')
         if user_name in members:
-            ctx.logger.info(f'User {user_name} is member of {user_group}')
             return True
     return False

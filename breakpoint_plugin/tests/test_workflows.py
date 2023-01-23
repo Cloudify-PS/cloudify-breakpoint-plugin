@@ -37,7 +37,7 @@ class BreakpointWorkflowTest(BreakpointTestBase):
         node_instance = namedtuple('MockNodeInstance', 'node_id')
         mock_rest_client.node_instances.get = MagicMock(
             return_value=node_instance('BreakpointTestCase'))
-        mock_rest_client.users.get_self = MagicMock(
+        mock_rest_client.user_groups.get = MagicMock(
             return_value={
                 "ldap_dn": "",
                 "tenants": 0,
