@@ -42,3 +42,20 @@ def has_authorized_role(tenant, authorized_roles):
         if set(user_roles).intersection(authorized_roles):
             return True
         return False
+
+
+def is_authorized_group_member(user_name, user_groups=None):
+    """
+        Check if user is members any of user_groups
+        :param user_groups: list of user groups
+        :param user_name: name of user
+    """
+    if not user_groups:
+        return False
+    client = get_rest_client()
+    for user_group in user_groups:
+        members = client.user_groups.get(user_group, _get_data=True).\
+            get('users', [])
+        if user_name in members:
+            return True
+    return False

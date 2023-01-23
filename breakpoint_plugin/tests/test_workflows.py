@@ -30,6 +30,35 @@ class BreakpointWorkflowTest(BreakpointTestBase):
                 }})
         return mock_rest_client
 
+    def get_mock_rest_client_for_group_users(self,
+                                             execution_creator_role=None,
+                                             execution_creator_tenant_roles=None,
+                                             group_name=None,
+                                             members=None):
+        mock_rest_client = MagicMock()
+        node_instance = namedtuple('MockNodeInstance', 'node_id')
+        mock_rest_client.node_instances.get = MagicMock(
+            return_value=node_instance('BreakpointTestCase'))
+        if execution_creator_tenant_roles is None:
+            execution_creator_tenant_roles = ['user']
+        mock_rest_client.users.get_self = MagicMock(
+            return_value={
+                'role': execution_creator_role,
+                'tenants': {
+                    'default_tenant': {
+                        'roles': execution_creator_tenant_roles
+                    }
+                }})
+        mock_rest_client.user_groups.get = MagicMock(
+            return_value={
+                "ldap_dn": "",
+                "tenants": 0,
+                "name": group_name,
+                "users": members
+            }
+        )
+        return mock_rest_client
+
     @patch('breakpoint_plugin.utils.get_rest_client')
     def test_admin_allowed(self, get_rest_client):
         get_rest_client.return_value = self.get_mock_rest_client(
@@ -163,6 +192,71 @@ class BreakpointWorkflowTest(BreakpointTestBase):
                 'authorization': {
                     'users': [],
                     'roles': ['manager']
+                }
+            },
+            type_hierarchy=['cloudify.nodes.Root', BREAKPOINT_TYPE],
+            node_type=BREAKPOINT_TYPE,
+            ctx_operation_name='set_breakpoint_state',
+            ctx_execution_creator_username='Eve')
+        self._ctx.get_node = MagicMock(return_value=self._ctx.node)
+        self._ctx.nodes = MagicMock(return_value=[self._ctx.node])
+        self._ctx.node_instances = MagicMock(
+            return_value=[self._ctx.node.instances])
+
+        with self.assertRaises(NonRecoverableError):
+            set_breakpoint_state(node_ids=['BreakpointTestCase'],
+                                 ctx=self._ctx)
+
+    @patch('breakpoint_plugin.utils.get_rest_client')
+    def test_authorized_user_groups(self, get_rest_client):
+        get_rest_client.return_value = \
+            self.get_mock_rest_client_for_group_users(
+                group_name='TEST_GROUP',
+                members=['tg_member']
+            )
+        self._prepare_context_for_operation(
+            test_name='BreakpointTestCase',
+            test_properties={
+                'resource_config': {
+                    'default_break_on_install': True
+                },
+                'authorization': {
+                    'users': [],
+                    'roles': [],
+                    'user_groups': ['TEST_GROUP']
+                }
+            },
+            type_hierarchy=['cloudify.nodes.Root', BREAKPOINT_TYPE],
+            node_type=BREAKPOINT_TYPE,
+            ctx_operation_name='set_breakpoint_state',
+            ctx_execution_creator_username='tg_member')
+        self._ctx.get_node = MagicMock(return_value=self._ctx.node)
+        self._ctx.nodes = MagicMock(return_value=[self._ctx.node])
+        self._ctx.node_instances = MagicMock(
+            return_value=[self._ctx.node.instances])
+
+        result = set_breakpoint_state(node_ids=['BreakpointTestCase'],
+                                      ctx=self._ctx)
+
+        self.assertTrue(result)
+
+    @patch('breakpoint_plugin.utils.get_rest_client')
+    def test_unauthorized_user_groups(self, get_rest_client):
+        get_rest_client.return_value = \
+            self.get_mock_rest_client_for_group_users(
+                group_name='TEST_GROUP',
+                members=['tg_member']
+            )
+        self._prepare_context_for_operation(
+            test_name='BreakpointTestCase',
+            test_properties={
+                'resource_config': {
+                    'default_break_on_install': True
+                },
+                'authorization': {
+                    'users': [],
+                    'roles': [],
+                    'user_groups': ['TEST_GROUP']
                 }
             },
             type_hierarchy=['cloudify.nodes.Root', BREAKPOINT_TYPE],
