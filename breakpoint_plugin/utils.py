@@ -55,7 +55,7 @@ def is_authorized_group_member(user_name, user_groups=None):
     client = get_rest_client()
     for user_group in user_groups:
         members = client.user_groups.get(user_group, _get_data=True).\
-            get('users')
+            get('users', [])
         if user_name in members:
             return True
     return False
